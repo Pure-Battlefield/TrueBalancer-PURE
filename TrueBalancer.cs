@@ -307,6 +307,9 @@ namespace PRoConEvents {
 
         private enumBoolYesNo showMoves;
         private enumBoolYesNo Check4Update;
+
+        //PURE
+        private int intPopMaintainSquads; 
         
         public TrueBalancer() {
 
@@ -552,6 +555,9 @@ namespace PRoConEvents {
 
             showMoves = enumBoolYesNo.No;
             Check4Update = enumBoolYesNo.Yes;
+
+            //PURE
+            this.intPopMaintainSquads = 0;
         }
 
         #endregion
@@ -563,7 +569,7 @@ namespace PRoConEvents {
         }
 
         public string GetPluginVersion() {
-            return "0.5.3.0 PURE 0.0.0";
+            return "0.5.3.0 PURE 0.0.1";
         }
 
         public string GetPluginAuthor() {
@@ -1162,7 +1168,8 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             lstReturn.Add(new CPluginVariable("6. Automatic Update Check settings|Check for Update?", this.Check4Update.GetType(), this.Check4Update));
 
             lstReturn.Add(new CPluginVariable("7. Testing settings|Enable Virtual Mode?", this.ynbVirtualMode.GetType(), this.ynbVirtualMode));
-            
+            //PURE
+            lstReturn.Add(new CPluginVariable("8. PURE Custom Balance Settings|Minimum population to start maintaining squads", this.intPopMaintainSquads.GetType(), this.intPopMaintainSquads)); 
             return lstReturn;
         }
 
@@ -1317,6 +1324,8 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             lstReturn.Add(new CPluginVariable("Check for Update?", this.Check4Update.GetType(), this.Check4Update));
 
             lstReturn.Add(new CPluginVariable("Enable Virtual Mode?", this.ynbVirtualMode.GetType(), this.ynbVirtualMode));
+
+            lstReturn.Add(new CPluginVariable("Minimum population to start maintaining squads", this.intPopMaintainSquads.GetType(), this.intPopMaintainSquads));
 
             return lstReturn;
         }
@@ -2020,6 +2029,18 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             {
                 this.Check4Update = (enumBoolYesNo)Enum.Parse(typeof(enumBoolYesNo), strValue);
             }
+                //PURE
+            else if (strVariable.CompareTo("Minimum population to start maintaining squads") == 0 && Int32.TryParse(strValue, out this.intPopMaintainSquads) == true)
+            {
+                if (this.intPopMaintainSquads >= 0)
+                {
+                    this.intPopMaintainSquads = Convert.ToInt32(strValue);
+                }
+                else
+                {
+                    this.intPopMaintainSquads = 1;
+                }
+            }
 
             if (strVariable == "Enable Virtual Mode?" && Enum.IsDefined(typeof(enumBoolYesNo), strValue) == true)
             {
@@ -2030,6 +2051,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     this.ExecuteCommand("procon.protected.pluginconsole.write", "^b^9TrueBalancer:^n ^1^bVirtual mode is ENABLED!^n^0 No player moves or say/yells will be sent to the game server.");
                 }
             }
+
 
         }
 
@@ -6001,7 +6023,15 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
                 if (this.strScrambleMode == "Keep all Squads")
                 {
-                    KeepAllSquads();
+                    // PURE: Added condition to not keep squads if population is below threshold
+                    if ((this.TeamA + this.TeamB) >= this.intPopMaintainSquads)
+                    {
+                        KeepAllSquads();
+                    }
+                    else
+                    {
+                        KeepNoSquads();
+                    }
                 }
                 else if (this.strScrambleMode == "Keep squads with two or more clanmates")
                 {
