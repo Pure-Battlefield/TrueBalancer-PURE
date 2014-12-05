@@ -1,4 +1,5 @@
-/*  Copyright 2011 Panther
+﻿/*  Copyright 2011 Panther
+    Modified by PURE (gamewithpure.org)
 
     This plugin is made for PRoCon.
 
@@ -56,11 +57,13 @@ using PRoCon.Core.Players.Items;
 using PRoCon.Core.Battlemap;
 using PRoCon.Core.Maps;
 
-namespace PRoConEvents {
-    public class TrueBalancer : PRoConPluginAPI, IPRoConPluginInterface {
+namespace PRoConEvents
+{
+    public class TrueBalancer : PRoConPluginAPI, IPRoConPluginInterface
+    {
 
         #region Variables and Constructors
-        
+
         //Proconvariables
         private string m_strHostName;
         private string m_strPort;
@@ -68,16 +71,16 @@ namespace PRoConEvents {
 
         private string Servertype;
 
-        private DateTime lastupdatecheck=DateTime.Now.AddHours(-4);
+        private DateTime lastupdatecheck = DateTime.Now.AddHours(-4);
 
         //TrueBalancer Variables    
 
         BattlelogClient bclient;
-        
+
         private Dictionary<string, CPlayerJoinInf> dicPlayerCache = new Dictionary<string, CPlayerJoinInf>();
         private Dictionary<int, CPlayerScoreInf> dicPlayerScore = new Dictionary<int, CPlayerScoreInf>();
         private Dictionary<int, CSquadScoreInf> dicSquadScore = new Dictionary<int, CSquadScoreInf>();
-        private Dictionary<string, int> dicSquadList= new Dictionary<string, int>();
+        private Dictionary<string, int> dicSquadList = new Dictionary<string, int>();
         private Dictionary<string, bool> OnCommandMove = new Dictionary<string, bool>();
         private List<string> OnCommandMoveDone;
 
@@ -94,20 +97,20 @@ namespace PRoConEvents {
         private string strMovedPlayer;
         private string strJoinedPlayerName;
         private string strShameMessage;
-        
+
         private string strScrambleDoneMsg;
         private string strScrambleNowMsg;
         private string strScrambleRoundMsg;
-        
+
         private string strFinalSquad;
         private string strErrorMsg;
-        private string strdeadplayer;   
-            
+        private string strdeadplayer;
+
         private int intInterval;
         private int intWarnings;
         private int intTimerWait;
         private int intI;
-        
+
         private int TeamA;
         private int TeamB;
         private int intPlayerDif;
@@ -119,7 +122,7 @@ namespace PRoConEvents {
         private int intScoreTeamA;
         private int intScoreTeamB;
         private int intTicketcount;
-        
+
         private int bestSquadTeamID;
         private int intTicketsdif;
         private int intCurrentRoundCount;
@@ -135,12 +138,12 @@ namespace PRoConEvents {
         private double dblValueDiffTDM;
         private double dblValueDiffGM;
         private int intScoreWTS;
-        
+
         private int intAllowDif;
         private int intminScore;
-        
+
         private int intminScoreRUSH;
-        private int intTreshRUSH;       
+        private int intTreshRUSH;
         private int intAllowDif1RUSH;
         private int intAllowDif2RUSH;
 
@@ -171,7 +174,7 @@ namespace PRoConEvents {
         private int intTreshTDM;
         private int intAllowDif1TDM;
         private int intAllowDif2TDM;
-        
+
         private double rankA;
         private double rankB;
         private double skillA;
@@ -184,7 +187,7 @@ namespace PRoConEvents {
         private double kdrB;
         private double TBvalueA;
         private double TBvalueB;
-        
+
         private enumBoolYesNo ynbDebugMode;
         private enumBoolYesNo ynbDebugModeSkill;
         private enumBoolYesNo ynbDebugModeGuard;
@@ -218,7 +221,7 @@ namespace PRoConEvents {
         private enumBoolYesNo ynbenableSkillDF;
         private enumBoolYesNo ynbScrambleMapDF;
         private string ScrambleByDF;
-        
+
         private enumBoolYesNo ynbenableSkillCONQUEST;
         private enumBoolYesNo ynbScrambleMapCONQUEST;
         private enumBoolYesNo ynbScrambleEveryRoundCONQUEST;
@@ -243,7 +246,7 @@ namespace PRoConEvents {
         private int intwonTicketsOB;
         private string strScrambleMessageOB;
         private string ScrambleByOB;
- 
+
         private enumBoolYesNo ynbenableSkillTDM;
         private enumBoolYesNo ynbScrambleMapTDM;
         private enumBoolYesNo ynbScrambleEveryRoundTDM;
@@ -251,7 +254,7 @@ namespace PRoConEvents {
         private int intshowTicketsTDM;
         private string strScrambleMessageTDM;
         private string ScrambleByTDM;
-        
+
         private bool m_isPluginEnabled;
         private bool boolplayerexists;
         private bool boolneedbalance;
@@ -267,7 +270,7 @@ namespace PRoConEvents {
         private bool boolmanuellchange;
         private bool boolnoplayer;
         private bool boolscrambleActive;
-        private bool boolscrambleNow; 
+        private bool boolscrambleNow;
         private bool boolTeamsScrambled;
         private bool boolRunOnList;
         private bool boolplayerleft;
@@ -281,11 +284,11 @@ namespace PRoConEvents {
         private bool boolbalanced;
         private bool boolscramblebyadminroundend;
         private bool showfirstmove;
-                
-        private string strcurrentGametype;      
+
+        private string strcurrentGametype;
         private TimeSpan TSWait;
         private DateTime DTScramblestarted;
-        
+
         private DateTime DTLevelStart;
         private TimeSpan TSLevelStartWait;
 
@@ -295,7 +298,7 @@ namespace PRoConEvents {
         private TimeSpan EndRoundSeconds;
         private DateTime EndRoundTime;
         private DateTime DTLevelLoaded;
-        
+
         //private Timer myTimer = new Timer();
         //private TimeSpan TSWaitforOP;
         // private bool boolOnLogin;        
@@ -309,19 +312,20 @@ namespace PRoConEvents {
         private enumBoolYesNo Check4Update;
 
         //PURE
-        private int intPopMaintainSquads; 
-        
-        public TrueBalancer() {
+        private int intPopMaintainSquads;
+
+        public TrueBalancer()
+        {
 
             //lastupdatecheck = DateTime.Now.AddHours(-4);
 
-             this.bclient = new BattlelogClient(this);
+            this.bclient = new BattlelogClient(this);
 
-            this.dicPlayerCache = new Dictionary<string, CPlayerJoinInf>(); 
+            this.dicPlayerCache = new Dictionary<string, CPlayerJoinInf>();
             this.dicPlayerScore = new Dictionary<int, CPlayerScoreInf>();
             this.dicSquadScore = new Dictionary<int, CSquadScoreInf>();
             this.dicSquadList = new Dictionary<string, int>();
-            this.OnCommandMove = new Dictionary<string,bool>();
+            this.OnCommandMove = new Dictionary<string, bool>();
             this.OnCommandMoveDone = new List<string>();
 
             this.Servertype = "AUTOMATIC";
@@ -335,7 +339,7 @@ namespace PRoConEvents {
             this.strAWhitelistComplete = new string[] { };
             this.teamswitcher = new List<string>();
             this.BalancedPlayers = new List<string>();
-            
+
             //this.PlayersOnServer = new List<string>(new string[] {"Z1", "Z2", "HRPanter"}); //panter
             this.strWarning = "EVEN TEAMS! Autobalancing teams shortly.";
             this.strLastWarning = "AUTOBALANCING [Player: %MovedPlayer%]";
@@ -343,15 +347,15 @@ namespace PRoConEvents {
             this.strMovedPlayer = "";
             this.strJoinedPlayerName = "";
             this.strShameMessage = "%TeamSwitcher% tried to switch into the winning team. SHAME ON YOU!";
-            
+
             this.strScrambleDoneMsg = "Teams are scrambled now. Good luck all!";
             this.strScrambleNowMsg = "Teams are going to be scrambled now. This may take up to 20 seconds!";
             this.strScrambleRoundMsg = "Teams are going to be scrambled on next round!";
-            
+
             this.strFinalSquad = "";
             this.strErrorMsg = "";
             this.strdeadplayer = "";
-            
+
             this.intInterval = 15;
             this.intWarnings = 1;
             this.intTimerWait = 15;
@@ -364,8 +368,8 @@ namespace PRoConEvents {
             this.intNewTeam = 0;
             this.intcountWarnings = 0;
             this.intWaitSeconds = 0;
-            this.intScoreTeamA = 0; 
-            this.intScoreTeamB = 0;     
+            this.intScoreTeamA = 0;
+            this.intScoreTeamB = 0;
             this.bestSquadTeamID = 0;
             this.intCurrentRoundCount = 100;
             this.intTicketsdif = -1;
@@ -382,7 +386,7 @@ namespace PRoConEvents {
             this.dblValueDiffGM = 10;
             this.intScoreWTS = 50;
             this.intTicketcount = 123987123;
-            
+
             this.rankA = 0;
             this.rankB = 0;
             this.skillA = 0;
@@ -395,7 +399,7 @@ namespace PRoConEvents {
             this.kdrB = 0;
             this.TBvalueA = 0;
             this.TBvalueB = 0;
-            
+
             this.ynbDebugMode = enumBoolYesNo.No;
             this.ynbDebugModeSkill = enumBoolYesNo.No;
             this.ynbDebugModeGuard = enumBoolYesNo.No;
@@ -419,7 +423,7 @@ namespace PRoConEvents {
 
             this.ynbScrambleRoundViaPRoCon = enumBoolYesNo.No;
             this.ynbScrambleRoundViaPRoConConf = enumBoolYesNo.No;
-                
+
             this.backswitcher = false;
             this.boolplayerleft = false;
             this.m_isPluginEnabled = false;
@@ -454,10 +458,10 @@ namespace PRoConEvents {
             this.TSLevelStartWait = new TimeSpan(0);
             this.DTLevelStart = new DateTime();
             this.DTLevelLoaded = new DateTime();
-            
+
             this.intAllowDif = 500;
             this.intminScore = 500;
-            
+
             this.intminScoreRUSH = 15;
             this.intTreshRUSH = 24;
             this.intAllowDif1RUSH = 1;
@@ -485,7 +489,7 @@ namespace PRoConEvents {
             this.intTreshOB = 24;
             this.intAllowDif1OB = 1;
             this.intAllowDif2OB = 2;
-            
+
             this.intminScoreTDM = 25;
             this.intTreshTDM = 24;
             this.intAllowDif1TDM = 1;
@@ -493,7 +497,7 @@ namespace PRoConEvents {
 
             //this.strScrambleMode = "Keep squads with two or more clanmates";
             this.strScrambleMode = "Keep all Squads";
-            
+
             this.ynbenableSkillRUSH = enumBoolYesNo.No;
             this.ynbScrambleMapRUSH = enumBoolYesNo.No;
             this.ScrambleByRUSH = "TB-Value";
@@ -564,24 +568,29 @@ namespace PRoConEvents {
 
         #region PluginSetup
 
-        public string GetPluginName() {
+        public string GetPluginName()
+        {
             return "TrueBalancer";
         }
 
-        public string GetPluginVersion() {
+        public string GetPluginVersion()
+        {
             return "0.5.3.0 PURE 0.0.1";
         }
 
-        public string GetPluginAuthor() {
+        public string GetPluginAuthor()
+        {
             return "onegrizzlybeer, versions < 0.5 by Panther";
         }
 
-        public string GetPluginWebsite() {
+        public string GetPluginWebsite()
+        {
             return "forum.myrcon.com/showthread.php?7169-TrueBalancer-0-5-0-0";
         }
 
         // A note to plugin authors: DO NOT change how a tag works, instead make a whole new tag.
-        public string GetPluginDescription() {
+        public string GetPluginDescription()
+        {
             return @"<p> ... and contributors from the Procon community.</p>
 <p>If you like my plugin, please feel free to donate</p>
 <blockquote>
@@ -781,48 +790,50 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 ";
         }
 
-        public void OnPluginLoaded(string strHostName, string strPort, string strPRoConVersion) {
+        public void OnPluginLoaded(string strHostName, string strPort, string strPRoConVersion)
+        {
             this.boolRunOnList = false;
             this.boolLevelLoaded = true;
             this.boolnoplayer = false;
             this.boolscrambleNow = false;
             this.boolscrambleActive = false;
             this.intTicketsdif = -1;
-            this.boolTeamsScrambled  = false;
+            this.boolTeamsScrambled = false;
             this.boolticketdif = false;
             this.m_strHostName = strHostName;
             this.m_strPort = strPort;
             this.m_strPRoConVersion = strPRoConVersion;
-            this.RegisterEvents(this.GetType().Name,    "OnReservedSlotsList", 
-                                                        "OnListPlayers", 
-                                                        "OnPlayerSquadChange", 
-                                                        "OnPlayerMovedByAdmin", 
-                                                        "OnRoundOverPlayers", 
-                                                        "OnRoundOverTeamScores", 
-                                                        "OnPlayerSpawned", 
-                                                        "OnLevelLoaded", 
-                                                        "OnResponseError", 
-                                                        "OnLogin", 
-                                                        "OnServerInfo", 
-                                                        "OnPlayerTeamChange", 
-                                                        "OnPlayerLeft", 
-                                                        "OnRoundOver", 
-                                                        //"BalancingTimer",
+            this.RegisterEvents(this.GetType().Name, "OnReservedSlotsList",
+                                                        "OnListPlayers",
+                                                        "OnPlayerSquadChange",
+                                                        "OnPlayerMovedByAdmin",
+                                                        "OnRoundOverPlayers",
+                                                        "OnRoundOverTeamScores",
+                                                        "OnPlayerSpawned",
+                                                        "OnLevelLoaded",
+                                                        "OnResponseError",
+                                                        "OnLogin",
+                                                        "OnServerInfo",
+                                                        "OnPlayerTeamChange",
+                                                        "OnPlayerLeft",
+                                                        "OnRoundOver",
+                //"BalancingTimer",
                                                         "OnPlayerKilled",
                                                         "OnRestartLevel",
                                                         "OnRunNextLevel");
         }
 
-        public void OnPluginEnable() {
+        public void OnPluginEnable()
+        {
             this.ExecuteCommand("procon.protected.pluginconsole.write", "^bTrueBalancer ^2Enabled! " + GetPluginVersion());
             this.boolfirstwarningWL = false;
-            this.m_isPluginEnabled = true; 
+            this.m_isPluginEnabled = true;
             this.RegisterAllCommands();
             //this.boolOnLogin = true;
             this.boolLevelStart = false;
             this.boolLevelLoaded = true;
             this.boolFirstOP = false;
-            this.boolgametype = false; 
+            this.boolgametype = false;
             this.DTLevelStart = new DateTime();
             this.boolnoplayer = false;
             this.intScrambledPlayers = 0;
@@ -833,17 +844,19 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             this.boolticketdif = false;
             this.DTScramblestarted = new DateTime();
             this.boolRunOnList = false;
-            
+
         }
 
-        public void OnPluginDisable() {
+        public void OnPluginDisable()
+        {
             this.UnregisterAllCommands();
 
             this.boolfirstwarningWL = false;
-            this.m_isPluginEnabled = false; 
-            this.boolneedbalance = false; 
+            this.m_isPluginEnabled = false;
+            this.boolneedbalance = false;
 
-            if (this.boolscrambleActive){
+            if (this.boolscrambleActive)
+            {
                 this.DebugInfoSkill("^8^bScrambler active at Disabled. STOP! Teams partly scrambled!");
                 this.boolTeamsScrambled = true;
                 this.intScrambledPlayers = 0;
@@ -851,18 +864,19 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 this.boolscrambleActive = false;
                 this.intScrambleCount = 0;
             }
-            this.dicPlayerCache.Clear(); 
+            this.dicPlayerCache.Clear();
             this.dicPlayerScore.Clear();
             this.dicSquadScore.Clear();
             this.dicSquadList.Clear();
             this.OnCommandMove.Clear();
             this.OnCommandMoveDone.Clear();
             this.BalancedPlayers.Clear();
-            
+
             this.ExecuteCommand("procon.protected.pluginconsole.write", "^bTrueBalancer ^1Disabled =(");
         }
 
-        public List<CPluginVariable> GetDisplayPluginVariables() {
+        public List<CPluginVariable> GetDisplayPluginVariables()
+        {
 
             List<CPluginVariable> lstReturn = new List<CPluginVariable>();
 
@@ -894,7 +908,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             {
                 lstReturn.Add(new CPluginVariable("1. Playernumber Balancer: Settings|Message for moved Player", this.strBeenMoved.GetType(), this.strBeenMoved));
             }
-            
+
             lstReturn.Add(new CPluginVariable("1.1 Playernumber Balancer: RUSH|RUSH-Player Threshold", this.intTreshRUSH.GetType(), this.intTreshRUSH));
             lstReturn.Add(new CPluginVariable("1.1 Playernumber Balancer: RUSH|RUSH-Allowing Player Difference below Threshold", this.intAllowDif1RUSH.GetType(), this.intAllowDif1RUSH));
             lstReturn.Add(new CPluginVariable("1.1 Playernumber Balancer: RUSH|RUSH-Allowing Player Difference equal to/above Threshold", this.intAllowDif2RUSH.GetType(), this.intAllowDif2RUSH));
@@ -929,7 +943,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             lstReturn.Add(new CPluginVariable("1.7 Playernumber Balancer: DOMINATION|DOM-Stop balancing, when tickets till end", this.intminScoreDOM.GetType(), this.intminScoreDOM));
 
             lstReturn.Add(new CPluginVariable("2.1 Skill-Scrambler: RUSH|RUSH-Scramble teams on every new map?", typeof(enumBoolYesNo), this.ynbenableSkillRUSH));
-            
+
             if (this.ynbenableSkillRUSH == enumBoolYesNo.Yes)
             {
                 lstReturn.Add(new CPluginVariable("2.1 Skill-Scrambler: RUSH|RUSH-Scramble by", "enum.ScrambleBy(TB-Value|Rank|Skill|SPM|SPMcombat|K/D)", this.ScrambleByRUSH));
@@ -972,16 +986,18 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 lstReturn.Add(new CPluginVariable("2.2 Skill-Scrambler: CONQUEST|CQ-Scrambling Message at roundend", this.strScrambleMessageCONQUEST.GetType(), this.strScrambleMessageCONQUEST));
                 lstReturn.Add(new CPluginVariable("2.2 Skill-Scrambler: CONQUEST|Yell scramble message at roundend?", typeof(enumBoolYesNo), this.ynbYellScrambleMessage));
             }
-                                 
+
             lstReturn.Add(new CPluginVariable("2.3 Skill-Scrambler: TEAMDEATHMATCH|TDM-Enable Skillscrambler?", typeof(enumBoolYesNo), this.ynbenableSkillTDM));
             if (this.ynbenableSkillTDM == enumBoolYesNo.Yes)
             {
-                if(this.ynbScrambleEveryRoundTDM == enumBoolYesNo.No){
+                if (this.ynbScrambleEveryRoundTDM == enumBoolYesNo.No)
+                {
                     lstReturn.Add(new CPluginVariable("2.3 Skill-Scrambler: TEAMDEATHMATCH|TDM-Scramble on every new map no matter what score?", typeof(enumBoolYesNo), this.ynbScrambleMapTDM));
                 }
-                if(this.ynbScrambleMapTDM == enumBoolYesNo.No){
+                if (this.ynbScrambleMapTDM == enumBoolYesNo.No)
+                {
                     lstReturn.Add(new CPluginVariable("2.3 Skill-Scrambler: TEAMDEATHMATCH|TDM-Check balance on every new Round (else on new Map only)", typeof(enumBoolYesNo), this.ynbScrambleEveryRoundTDM));
-                    lstReturn.Add(new CPluginVariable("2.3 Skill-Scrambler: TEAMDEATHMATCH|TDM-Scramble, if x % Tickets difference (% of maxTickets)", this.intwonTicketsTDM.GetType(), this.intwonTicketsTDM));    
+                    lstReturn.Add(new CPluginVariable("2.3 Skill-Scrambler: TEAMDEATHMATCH|TDM-Scramble, if x % Tickets difference (% of maxTickets)", this.intwonTicketsTDM.GetType(), this.intwonTicketsTDM));
                 }
                 //lstReturn.Add(new CPluginVariable("2.3 Skill-Scrambler: TEAMDEATHMATCH|TDM-Show Scramble message at roundend when x Tickets are reached", this.intwonTicketsTDM.GetType(), this.intshowTicketsTDM));
                 lstReturn.Add(new CPluginVariable("2.3 Skill-Scrambler: TEAMDEATHMATCH|TDM-Scramble by", "enum.ScrambleBy(TB-Value|Rank|Skill|SPM|SPMcombat|K/D)", this.ScrambleByTDM));
@@ -992,7 +1008,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 }
                 lstReturn.Add(new CPluginVariable("2.3 Skill-Scrambler: TEAMDEATHMATCH|TDM-Scrambling Message at roundend", this.strScrambleMessageTDM.GetType(), this.strScrambleMessageTDM));
                 lstReturn.Add(new CPluginVariable("2.3 Skill-Scrambler: TEAMDEATHMATCH|Yell scramble message at roundend?", typeof(enumBoolYesNo), this.ynbYellScrambleMessage));
-                
+
             }
 
             lstReturn.Add(new CPluginVariable("2.4 Skill-Scrambler: GUN MASTER / CTF|GM/CTF-Scramble teams on every new map?", typeof(enumBoolYesNo), this.ynbenableSkillGM));
@@ -1128,13 +1144,14 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             }
 
             lstReturn.Add(new CPluginVariable("3. Balancing Guard|Enable Balancing Guard?", this.ynbBalancingGuard.GetType(), this.ynbBalancingGuard));
-            if (this.ynbBalancingGuard == enumBoolYesNo.Yes){
+            if (this.ynbBalancingGuard == enumBoolYesNo.Yes)
+            {
                 lstReturn.Add(new CPluginVariable("3. Balancing Guard|Rush - Sort by (same as Scramble by)", "enum.ScrambleBy(TB-Value|Rank|Skill|SPM|SPMcombat|K/D)", this.ScrambleByRUSH));
                 //lstReturn.Add(new CPluginVariable("3. Balancing Guard|Rush - Start sorting at Difference of", this.dblValueDiffRUSH.GetType(), this.dblValueDiffRUSH));
-                
+
                 lstReturn.Add(new CPluginVariable("3. Balancing Guard|Conquest - Sort by (same as Scramble by)", "enum.ScrambleBy(TB-Value|Rank|Skill|SPM|SPMcombat|K/D)", this.ScrambleByCONQUEST));
                 //lstReturn.Add(new CPluginVariable("3. Balancing Guard|Conquest - Start sorting at Difference of", this.dblValueDiffCONQUEST.GetType(), this.dblValueDiffCONQUEST));
-                
+
                 lstReturn.Add(new CPluginVariable("3. Balancing Guard|TDM - Sort by (same as Scramble by)", "enum.ScrambleBy(TB-Value|Rank|Skill|SPM|SPMcombat|K/D)", this.ScrambleByTDM));
                 //lstReturn.Add(new CPluginVariable("3. Balancing Guard|TDM - Start sorting at Difference of", this.dblValueDiffTDM.GetType(), this.dblValueDiffTDM));
 
@@ -1147,7 +1164,8 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
                 lstReturn.Add(new CPluginVariable("3. Balancing Guard|CQ/TDM - Stop winning team switching, when x % TicketDiff (% of maxTickets)", this.intScoreWTS.GetType(), this.intScoreWTS));
                 lstReturn.Add(new CPluginVariable("3. Balancing Guard|CQ/TDM - Enable Shame Message?", this.ynbShameMessage.GetType(), this.ynbShameMessage));
-                if (this.ynbShameMessage == enumBoolYesNo.Yes){
+                if (this.ynbShameMessage == enumBoolYesNo.Yes)
+                {
                     lstReturn.Add(new CPluginVariable("3. Balancing Guard|CQ/TDM - Shame Message", this.strShameMessage.GetType(), this.strShameMessage));
                 }
             }
@@ -1169,12 +1187,13 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
             lstReturn.Add(new CPluginVariable("7. Testing settings|Enable Virtual Mode?", this.ynbVirtualMode.GetType(), this.ynbVirtualMode));
             //PURE
-            lstReturn.Add(new CPluginVariable("8. PURE Custom Balance Settings|Minimum population to start maintaining squads", this.intPopMaintainSquads.GetType(), this.intPopMaintainSquads)); 
+            lstReturn.Add(new CPluginVariable("8. PURE Custom Balance Settings|Minimum population to start maintaining squads", this.intPopMaintainSquads.GetType(), this.intPopMaintainSquads));
             return lstReturn;
         }
 
         // Lists all of the plugin variables.
-        public List<CPluginVariable> GetPluginVariables() {
+        public List<CPluginVariable> GetPluginVariables()
+        {
 
             List<CPluginVariable> lstReturn = new List<CPluginVariable>();
 
@@ -1183,7 +1202,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
             lstReturn.Add(new CPluginVariable("PRoCon - Scramble Teams on Roundend?", this.ynbScrambleRoundViaPRoCon.GetType(), this.ynbScrambleRoundViaPRoCon));
             lstReturn.Add(new CPluginVariable("PRoCon - Scramble Teams on Roundend? Are you sure?", this.ynbScrambleRoundViaPRoConConf.GetType(), this.ynbScrambleRoundViaPRoConConf));
-            
+
 
             lstReturn.Add(new CPluginVariable("How many warnings?", this.intWarnings.GetType(), this.intWarnings));
             lstReturn.Add(new CPluginVariable("Time between Warnings in sec", this.intInterval.GetType(), this.intInterval));
@@ -1233,17 +1252,17 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             lstReturn.Add(new CPluginVariable("Enable Whitelist", typeof(enumBoolYesNo), this.ynbWhitelist));
             lstReturn.Add(new CPluginVariable("Whitelist ClanTags", this.strAClantagWhitelist.GetType(), this.strAClantagWhitelist));
             lstReturn.Add(new CPluginVariable("Whitelist Names", this.strAWhitelist.GetType(), this.strAWhitelist));
-            lstReturn.Add(new CPluginVariable("Include VIP/Reserved Slots List into the whitelist?",typeof(enumBoolYesNo), this.ynbincludeVIPlist));
-            
+            lstReturn.Add(new CPluginVariable("Include VIP/Reserved Slots List into the whitelist?", typeof(enumBoolYesNo), this.ynbincludeVIPlist));
+
             lstReturn.Add(new CPluginVariable("Enable Command: !scrambleround", typeof(enumBoolYesNo), this.ynbEnableScrambleRound));
             lstReturn.Add(new CPluginVariable("Enable Command: !scramblenow", typeof(enumBoolYesNo), this.ynbEnableScrambleNow));
-            
+
             lstReturn.Add(new CPluginVariable("Show Scrambling messages to the server?", typeof(enumBoolYesNo), this.ynbScrambleMessage));
             lstReturn.Add(new CPluginVariable("Yell messages to the server?", this.ynbYellScrambleManuall.GetType(), this.ynbYellScrambleManuall));
             lstReturn.Add(new CPluginVariable("Message when admin requests a scramble at roundend", this.strScrambleRoundMsg.GetType(), this.strScrambleRoundMsg));
             lstReturn.Add(new CPluginVariable("Message when admin requests a scramble now", this.strScrambleNowMsg.GetType(), this.strScrambleNowMsg));
             lstReturn.Add(new CPluginVariable("Message when scrambling is done", this.strScrambleDoneMsg.GetType(), this.strScrambleDoneMsg));
-            
+
             lstReturn.Add(new CPluginVariable("Yell scramble message at roundend?", typeof(enumBoolYesNo), this.ynbYellScrambleMessage));
             lstReturn.Add(new CPluginVariable("What to do with squads?", "enum.SquadMode(Keep all Squads|Keep squads with two or more clanmates|Keep no squads)", this.strScrambleMode));
             lstReturn.Add(new CPluginVariable("ClanTag-List: Keep squad, if at least one player uses one of these ClanTags", this.strAClantagWhitelistScrambler.GetType(), this.strAClantagWhitelistScrambler));
@@ -1257,7 +1276,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
             lstReturn.Add(new CPluginVariable("DF-Scramble teams on every new map?", typeof(enumBoolYesNo), this.ynbenableSkillDF));
             lstReturn.Add(new CPluginVariable("DF-Scramble by", "enum.ScrambleBy(TB-Value|Rank|Skill|SPM|SPMcombat|K/D)", this.ScrambleByDF));
-            
+
             lstReturn.Add(new CPluginVariable("CQ-Enable Skillscrambler?", typeof(enumBoolYesNo), this.ynbenableSkillCONQUEST));
             lstReturn.Add(new CPluginVariable("CQ-Scramble on every new map no matter what score?", typeof(enumBoolYesNo), this.ynbScrambleMapCONQUEST));
             lstReturn.Add(new CPluginVariable("CQ-Check balance on every new Round (else on new Map only)", typeof(enumBoolYesNo), this.ynbScrambleEveryRoundCONQUEST));
@@ -1278,7 +1297,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             lstReturn.Add(new CPluginVariable("ClanTag-List: Keep squad, if at least one player uses one of these ClanTags", this.strAClantagWhitelistScrambler.GetType(), this.strAClantagWhitelistScrambler));
 
             lstReturn.Add(new CPluginVariable("OB-Scrambling Message at roundend", this.strScrambleMessageOB.GetType(), this.strScrambleMessageOB));
-            lstReturn.Add(new CPluginVariable("Yell scramble message at roundend?", typeof(enumBoolYesNo), this.ynbYellScrambleMessage));            
+            lstReturn.Add(new CPluginVariable("Yell scramble message at roundend?", typeof(enumBoolYesNo), this.ynbYellScrambleMessage));
 
             lstReturn.Add(new CPluginVariable("TDM-Enable Skillscrambler?", typeof(enumBoolYesNo), this.ynbenableSkillTDM));
             lstReturn.Add(new CPluginVariable("TDM-Scramble on every new map no matter what score?", typeof(enumBoolYesNo), this.ynbScrambleMapTDM));
@@ -1309,11 +1328,11 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             lstReturn.Add(new CPluginVariable("Conquest - Start sorting at Difference of", this.dblValueDiffCONQUEST.GetType(), this.dblValueDiffCONQUEST));
             lstReturn.Add(new CPluginVariable("TDM - Start sorting at Difference of", this.dblValueDiffTDM.GetType(), this.dblValueDiffTDM));
             lstReturn.Add(new CPluginVariable("GM/CTF - Start sorting at Difference of", this.dblValueDiffGM.GetType(), this.dblValueDiffGM));
-            
+
             lstReturn.Add(new CPluginVariable("CQ/TDM - Stop winning team switching, when x % TicketDiff (% of maxTickets)", this.intScoreWTS.GetType(), this.intScoreWTS));
             lstReturn.Add(new CPluginVariable("CQ/TDM - Enable Shame Message?", this.ynbShameMessage.GetType(), this.ynbShameMessage));
             lstReturn.Add(new CPluginVariable("CQ/TDM - Shame Message", this.strShameMessage.GetType(), this.strShameMessage));
-            
+
             //lstReturn.Add(new CPluginVariable("Scramble if won with over x Tickets (Coquest)", this.intwonTickets.GetType(), this.intwonTickets));
             //lstReturn.Add(new CPluginVariable("Scrambling Message at roundend (Coquest)", this.strScrambleMessage.GetType(), this.strScrambleMessage));
             //lstReturn.Add(new CPluginVariable("Scramble on every new map no matter what score(Rush and Conquest)", typeof(enumBoolYesNo), this.ynbScrambleMap));
@@ -1334,7 +1353,8 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
         // by the user can put any kind of data it wants in strValue.
         // use type.TryParse
 
-        public void SetPluginVariable(string strVariable, string strValue) {
+        public void SetPluginVariable(string strVariable, string strValue)
+        {
             if (strVariable.CompareTo("Servertype") == 0)
             {
                 this.Servertype = strValue;
@@ -1348,7 +1368,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 {
                     this.ExecuteCommand("procon.protected.pluginconsole.write", "^b^9TrueBalancer:^n ^8^bMaximum number of players to fetch must be between 0 and 3, inclusive!");
                     numPlayers = 1;
-                } 
+                }
                 else if (numPlayers == 0)
                 {
                     this.ExecuteCommand("procon.protected.pluginconsole.write", "^b^9TrueBalancer:^n ^1^bMaximum number of players to fetch set to 0, stats fetching is disabled!");
@@ -1359,7 +1379,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 }
                 this.intMaxPlayersToFetch = numPlayers;
             }
-            
+
             if (strVariable.CompareTo("PRoCon - Scramble Teams on Roundend?") == 0 && Enum.IsDefined(typeof(enumBoolYesNo), strValue) == true)
             {
                 this.ynbScrambleRoundViaPRoCon = (enumBoolYesNo)Enum.Parse(typeof(enumBoolYesNo), strValue);
@@ -1524,7 +1544,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             }
             else if (strVariable.CompareTo("RUSH-Stop balancing, when tickets till end") == 0 && Int32.TryParse(strValue, out  this.intminScoreRUSH) == true)
             {
-                    this.intminScoreRUSH = Convert.ToInt32(strValue);
+                this.intminScoreRUSH = Convert.ToInt32(strValue);
 
             }
 
@@ -1619,7 +1639,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     this.intAllowDif1CONQUEST = 1;
                 }
             }
-             else if (strVariable.CompareTo("CQ-Allowing Player Difference equal to/above Threshold") == 0 && Int32.TryParse(strValue, out  this.intAllowDif2CONQUEST) == true)
+            else if (strVariable.CompareTo("CQ-Allowing Player Difference equal to/above Threshold") == 0 && Int32.TryParse(strValue, out  this.intAllowDif2CONQUEST) == true)
             {
                 if (this.intAllowDif2CONQUEST > 0)
                 {
@@ -1630,9 +1650,9 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     this.intAllowDif2CONQUEST = 1;
                 }
             }
-             else if (strVariable.CompareTo("CQ-Stop balancing, when tickets till end") == 0 && Int32.TryParse(strValue, out  this.intminScoreCONQUEST) == true)
+            else if (strVariable.CompareTo("CQ-Stop balancing, when tickets till end") == 0 && Int32.TryParse(strValue, out  this.intminScoreCONQUEST) == true)
             {
-                    this.intminScoreCONQUEST = Convert.ToInt32(strValue);
+                this.intminScoreCONQUEST = Convert.ToInt32(strValue);
 
             }
 
@@ -1677,43 +1697,43 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
             else if (strVariable.CompareTo("TDM-Player Threshold") == 0 && Int32.TryParse(strValue, out  this.intTreshTDM) == true)
             {
-                if (this.intTreshTDM> 0)
+                if (this.intTreshTDM > 0)
                 {
-                    this.intTreshTDM= Convert.ToInt32(strValue);
+                    this.intTreshTDM = Convert.ToInt32(strValue);
                 }
                 else
                 {
-                    this.intTreshTDM= 0;
+                    this.intTreshTDM = 0;
                 }
             }
             else if (strVariable.CompareTo("TDM-Allowing Player Difference below Threshold") == 0 && Int32.TryParse(strValue, out  this.intAllowDif1TDM) == true)
             {
-                if (this.intAllowDif1TDM> 0)
+                if (this.intAllowDif1TDM > 0)
                 {
-                    this.intAllowDif1TDM= Convert.ToInt32(strValue);
+                    this.intAllowDif1TDM = Convert.ToInt32(strValue);
                 }
                 else
                 {
-                    this.intAllowDif1TDM= 1;
+                    this.intAllowDif1TDM = 1;
                 }
             }
-             else if (strVariable.CompareTo("TDM-Allowing Player Difference equal to/above Threshold") == 0 && Int32.TryParse(strValue, out  this.intAllowDif2TDM) == true)
+            else if (strVariable.CompareTo("TDM-Allowing Player Difference equal to/above Threshold") == 0 && Int32.TryParse(strValue, out  this.intAllowDif2TDM) == true)
             {
-                if (this.intAllowDif2TDM> 0)
+                if (this.intAllowDif2TDM > 0)
                 {
-                    this.intAllowDif2TDM= Convert.ToInt32(strValue);
+                    this.intAllowDif2TDM = Convert.ToInt32(strValue);
                 }
                 else
                 {
-                    this.intAllowDif2TDM= 1;
+                    this.intAllowDif2TDM = 1;
                 }
             }
-             else if (strVariable.CompareTo("TDM-Stop balancing, when tickets till end") == 0 && Int32.TryParse(strValue, out  this.intminScoreTDM) == true)
+            else if (strVariable.CompareTo("TDM-Stop balancing, when tickets till end") == 0 && Int32.TryParse(strValue, out  this.intminScoreTDM) == true)
             {
-                    this.intminScoreTDM = Convert.ToInt32(strValue);
+                this.intminScoreTDM = Convert.ToInt32(strValue);
 
             }
-            
+
             else if (strVariable.CompareTo("OB-Player Threshold") == 0 && Int32.TryParse(strValue, out  this.intTreshOB) == true)
             {
                 if (this.intTreshOB > 0)
@@ -1752,7 +1772,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 this.intminScoreOB = Convert.ToInt32(strValue);
 
             }
-                            
+
             else if (strVariable.CompareTo("Show ingame warnings?") == 0 && Enum.IsDefined(typeof(enumBoolYesNo), strValue) == true)
             {
                 this.ynbShowWarnings = (enumBoolYesNo)Enum.Parse(typeof(enumBoolYesNo), strValue);
@@ -1777,8 +1797,8 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             {
                 this.strBeenMoved = strValue;
             }
-            
-            
+
+
             else if (strVariable.CompareTo("Enable Command: !scrambleround") == 0 && Enum.IsDefined(typeof(enumBoolYesNo), strValue) == true)
             {
                 this.ynbEnableScrambleRound = (enumBoolYesNo)Enum.Parse(typeof(enumBoolYesNo), strValue);
@@ -1807,7 +1827,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             {
                 this.strScrambleDoneMsg = strValue;
             }
-            
+
             else if (strVariable.CompareTo("Yell scramble message at roundend?") == 0 && Enum.IsDefined(typeof(enumBoolYesNo), strValue) == true)
             {
                 this.ynbYellScrambleMessage = (enumBoolYesNo)Enum.Parse(typeof(enumBoolYesNo), strValue);
@@ -1952,7 +1972,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             {
                 this.ScrambleByOB = strValue;
             }
-            
+
             else if (strVariable.CompareTo("TDM-Enable Skillscrambler?") == 0 && Enum.IsDefined(typeof(enumBoolYesNo), strValue) == true)
             {
                 this.ynbenableSkillTDM = (enumBoolYesNo)Enum.Parse(typeof(enumBoolYesNo), strValue);
@@ -1964,7 +1984,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             else if (strVariable.CompareTo("TDM-Check balance on every new Round (else on new Map only)") == 0 && Enum.IsDefined(typeof(enumBoolYesNo), strValue) == true)
             {
                 this.ynbScrambleEveryRoundTDM = (enumBoolYesNo)Enum.Parse(typeof(enumBoolYesNo), strValue);
-            }   
+            }
             if (strVariable.CompareTo("TDM-Scramble, if x % Tickets difference (% of maxTickets)") == 0 && Int32.TryParse(strValue, out  this.intwonTicketsTDM) == true)
             {
                 if (this.intwonTicketsTDM >= 0)
@@ -1995,7 +2015,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             {
                 this.ScrambleByTDM = strValue;
             }
-            
+
 
             else if (strVariable.CompareTo("Enable Debug Mode for normal balancing") == 0 && Enum.IsDefined(typeof(enumBoolYesNo), strValue) == true)
             {
@@ -2029,7 +2049,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             {
                 this.Check4Update = (enumBoolYesNo)Enum.Parse(typeof(enumBoolYesNo), strValue);
             }
-                //PURE
+            //PURE
             else if (strVariable.CompareTo("Minimum population to start maintaining squads") == 0 && Int32.TryParse(strValue, out this.intPopMaintainSquads) == true)
             {
                 if (this.intPopMaintainSquads >= 0)
@@ -2055,21 +2075,22 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
         }
 
-        private void UnregisterAllCommands() {
-        
+        private void UnregisterAllCommands()
+        {
+
             List<string> emptyList = new List<string>();
-            
+
             this.UnregisterCommand(
                 new MatchCommand(
-                    emptyList, 
+                    emptyList,
                     "scramblenow",
                     this.Listify<MatchArgumentFormat>()
                 )
             );
-                                                    
+
             this.UnregisterCommand(
                 new MatchCommand(
-                    emptyList, 
+                    emptyList,
                     "scrambleround",
                     this.Listify<MatchArgumentFormat>()
                 )
@@ -2090,20 +2111,21 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     this.Listify<MatchArgumentFormat>()
                 )
             );
-            
+
         }
 
-        private void RegisterAllCommands(){
+        private void RegisterAllCommands()
+        {
 
             if (this.m_isPluginEnabled == true)
             {
-                MatchCommand confirmationCommand = new MatchCommand(this.Listify<string>("@", "!", "#"), "yes" , this.Listify<MatchArgumentFormat>());
-                
+                MatchCommand confirmationCommand = new MatchCommand(this.Listify<string>("@", "!", "#"), "yes", this.Listify<MatchArgumentFormat>());
+
                 this.RegisterCommand(
                     new MatchCommand(
-                        "TrueBalancer", 
-                        "OnCommandScrambleNow", 
-                        this.Listify<string>("@", "!", "#"), 
+                        "TrueBalancer",
+                        "OnCommandScrambleNow",
+                        this.Listify<string>("@", "!", "#"),
                         "scramblenow",
                         this.Listify<MatchArgumentFormat>(),
                         new ExecutionRequirements(
@@ -2111,16 +2133,16 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                             Privileges.CanMovePlayers,
                             0,
                             confirmationCommand,
-                            "You do not have enough privileges to scramble players"), 
+                            "You do not have enough privileges to scramble players"),
                         "Scrambling teams now! Use with caution."
                     )
                 );
-                                                        
+
                 this.RegisterCommand(
-                    new MatchCommand (
+                    new MatchCommand(
                         "TrueBalancer",
-                        "OnCommandScrambleRound", 
-                        this.Listify<string>("@", "!", "#"), 
+                        "OnCommandScrambleRound",
+                        this.Listify<string>("@", "!", "#"),
                         "scrambleround",
                         this.Listify<MatchArgumentFormat>(),
                         new ExecutionRequirements(
@@ -2137,7 +2159,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                         new MatchCommand(
                             "TrueBalancer",
                             "OnCommandTBMove",
-                            this.Listify<string>("@", "!", "#"), 
+                            this.Listify<string>("@", "!", "#"),
                             "tb-move",
                             this.Listify<MatchArgumentFormat>(
                                 new MatchArgumentFormat(
@@ -2177,10 +2199,10 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                         )
                     );
             }
-            
+
         }
         #endregion
-                    
+
         #region ProconPluginInterface
 
         public override void OnRestartLevel()
@@ -2233,61 +2255,71 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             }
         }
 
-        public virtual void OnReservedSlotsList(List<string> soldierNames) { 
-            
-            
+        public virtual void OnReservedSlotsList(List<string> soldierNames)
+        {
+
+
             this.strAWhitelistComplete = this.strAWhitelist;
             List<string> listWL = new List<string>(this.strAWhitelist);
-            
-            if (this.ynbWhitelist == enumBoolYesNo.Yes && this.ynbincludeVIPlist == enumBoolYesNo.Yes) {
-                
+
+            if (this.ynbWhitelist == enumBoolYesNo.Yes && this.ynbincludeVIPlist == enumBoolYesNo.Yes)
+            {
+
                 //this.DebugInfo ("reservedSlots");
-                foreach(string name in soldierNames){
+                foreach (string name in soldierNames)
+                {
                     listWL.Add(name);
                 }
                 this.strAWhitelistComplete = listWL.ToArray();
                 string whitelist = "";
-                foreach (KeyValuePair<string, CPlayerJoinInf> kvp in this.dicPlayerCache){
-                    if (((IList<string>)this.strAWhitelistComplete).Contains(kvp.Key)){
-                    whitelist = whitelist + kvp.Key + ", ";
+                foreach (KeyValuePair<string, CPlayerJoinInf> kvp in this.dicPlayerCache)
+                {
+                    if (((IList<string>)this.strAWhitelistComplete).Contains(kvp.Key))
+                    {
+                        whitelist = whitelist + kvp.Key + ", ";
                     }
                 }
-                
+
                 //this.DebugInfo("Online VIPs: " + whitelist);  
             }
         }
-        
-        public virtual void OnPlayerMovedByAdmin(string soldierName, int destinationTeamId, int destinationSquadId, bool forceKilled) {
+
+        public virtual void OnPlayerMovedByAdmin(string soldierName, int destinationTeamId, int destinationSquadId, bool forceKilled)
+        {
             this.boolscramblefailed = true;
             this.boolbalanced = true;
             // if (this.boolscrambleNow){
-                // foreach (KeyValuePair<int, CPlayerScoreInf> kvp in this.dicPlayerScore){
-                    // if (this.dicPlayerScore[kvp.Key].playerName == soldierName){
-                        // this.dicPlayerScore[kvp.Key].scrambled = true;
-                        // DebugInfoSkill (soldierName + " --- MOVED: team= " + destinationTeamId.ToString() + ", squad= " + destinationSquadId.ToString());
-                        // break;
-                    // }
-                // }
-                // ScrambleNow();
+            // foreach (KeyValuePair<int, CPlayerScoreInf> kvp in this.dicPlayerScore){
+            // if (this.dicPlayerScore[kvp.Key].playerName == soldierName){
+            // this.dicPlayerScore[kvp.Key].scrambled = true;
+            // DebugInfoSkill (soldierName + " --- MOVED: team= " + destinationTeamId.ToString() + ", squad= " + destinationSquadId.ToString());
+            // break;
+            // }
+            // }
+            // ScrambleNow();
             // }
         }
-        
-        public override void OnResponseError(List<string> lstRequestWords, string strError) {
+
+        public override void OnResponseError(List<string> lstRequestWords, string strError)
+        {
 
             //DebugInfoSkill ("^3W: ^9" + strError);
-            if (this.boolscrambleNow && this.strErrorMsg == ""){
+            if (this.boolscrambleNow && this.strErrorMsg == "")
+            {
                 this.boolscramblefailed = true;
                 this.strErrorMsg = strError;
-                if (strError == "SetSquadFailed"){
-                    DebugInfoSkill ("^b^8ScrambleNow: SetSquadFailed");             
+                if (strError == "SetSquadFailed")
+                {
+                    DebugInfoSkill("^b^8ScrambleNow: SetSquadFailed");
                 }
             }
         }
-            
-        public virtual void OnLevelLoaded(string mapFileName, string Gamemode, int roundsPlayed, int roundsTotal){
-            
-            
-            this.DTLevelLoaded= DateTime.Now;
+
+        public virtual void OnLevelLoaded(string mapFileName, string Gamemode, int roundsPlayed, int roundsTotal)
+        {
+
+
+            this.DTLevelLoaded = DateTime.Now;
             this.DebugInfo("^9New Level loaded");
             this.EndRoundSeconds = DateTime.Now - this.EndRoundTime;
             this.DebugInfoSkill("^9New Level loaded, after " + this.EndRoundSeconds.TotalSeconds.ToString("F2") + " seconds loading screen.");
@@ -2296,15 +2328,16 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             this.strcurrentGametype = Gamemode;
             this.DebugInfo("^9Gamemode: " + strcurrentGametype);
             this.boolLevelLoaded = true;
-            this.intCurrentRoundCount = roundsTotal - roundsPlayed; 
+            this.intCurrentRoundCount = roundsTotal - roundsPlayed;
             this.boolticketdif = false;
             this.boolbalanced = true;
             this.boolscramblebyadminroundend = false;
             this.OnCommandMove.Clear();
             this.OnCommandMoveDone.Clear();
             this.BalancedPlayers.Clear();
-            
-            if (this.boolscrambleActive){
+
+            if (this.boolscrambleActive)
+            {
                 this.DebugInfoSkill("^8^bScrambler active at Maploaded. STOP! Teams partly scrambled!");
                 this.boolTeamsScrambled = true;
                 this.intScrambledPlayers = 0;
@@ -2313,37 +2346,44 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 this.intScrambleCount = 0;
             }
         }
-        
-        public override void OnRoundOver(int iWinningTeamID) {
+
+        public override void OnRoundOver(int iWinningTeamID)
+        {
 
         }
-        
-        public virtual void OnRoundOverTeamScores(List<TeamScore> teamScores) { 
-            DebugInfoSkill ("^9^bONROUNDOVERTEAMSCORES");
+
+        public virtual void OnRoundOverTeamScores(List<TeamScore> teamScores)
+        {
+            DebugInfoSkill("^9^bONROUNDOVERTEAMSCORES");
 
             this.EndRoundSeconds = new TimeSpan(0);
             this.EndRoundTime = DateTime.Now.AddSeconds(60);
             this.showfirstmove = false;
-            
+
             int TeamAScore = 0;
             int TeamBScore = 0;
-            
+
             this.intTicketsdif = 0;
-            
-            if (teamScores.Count == 1){
+
+            if (teamScores.Count == 1)
+            {
                 TeamAScore = teamScores[0].Score;
                 TeamBScore = 0;
-            } else if (teamScores.Count == 2) {
+            }
+            else if (teamScores.Count == 2)
+            {
                 TeamAScore = teamScores[0].Score;
                 TeamBScore = teamScores[1].Score;
-            } else {
+            }
+            else
+            {
                 DebugInfoSkill("^8^bGamemode not Supported! Not scrambling.");
             }
-            
+
             if (TeamAScore > TeamBScore) this.intTicketsdif = TeamAScore - TeamBScore;
             else if (TeamBScore > TeamAScore) this.intTicketsdif = TeamBScore - TeamAScore;
             else this.intTicketsdif = 0;
-            
+
             /*
             if(this.ynbScrambleMap == enumBoolYesNo.Yes){
                 this.boolticketdif = true;
@@ -2357,12 +2397,12 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             this.intcountWarnings = 0;
             this.TSLevelStartWait = new TimeSpan();
             this.boolFirstOP = false;
-            this.boolgametype = false; 
+            this.boolgametype = false;
             this.boolmanuellchange = false;
             this.boolTeamsScrambled = false;
             this.intScrambledPlayers = 0;
             this.teamswitcher.Clear();
-            
+
             /*
             this.skillA = 0;
             this.skillB = 0;
@@ -2385,20 +2425,21 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             DebugInfoSkill("SKILL: " + strSKILL);
             
             */
-            
-            this.DebugInfo("^9Round Over, Roundnumber: ^b" + this.intCurrentRoundCount.ToString()); 
+
+            this.DebugInfo("^9Round Over, Roundnumber: ^b" + this.intCurrentRoundCount.ToString());
             this.DebugInfoSkill("^bTicketdifference at roundend: ^3" + this.intTicketsdif.ToString());
             this.DebugInfoSkill("^9Team 1 Data: ^7TBValue: ^b" + this.TBvalueA.ToString("F1") + "^n^0 - Rank: ^b" + this.rankA.ToString("F2") + "^n^1 - Skill: ^b" + this.skillA.ToString("F2") + "^n^2 - SPM: ^b" + this.spmA.ToString("F2") + "^n^3 - SPMcombat: ^b" + this.spmcombatA.ToString("F2") + "^n^4 - K/D: ^b" + this.kdrA.ToString("F2"));
             this.DebugInfoSkill("^9Team 2 Data: ^7TBValue: ^b" + this.TBvalueB.ToString("F1") + "^n^0 - Rank: ^b" + this.rankB.ToString("F2") + "^n^1 - Skill: ^b" + this.skillB.ToString("F2") + "^n^2 - SPM: ^b" + this.spmB.ToString("F2") + "^n^3 - SPMcombat: ^b" + this.spmcombatB.ToString("F2") + "^n^4 - K/D: ^b" + this.kdrB.ToString("F2"));
 
-            
-            
-            if(this.boolscramblebyadminroundend && this.strcurrentGametype != "SquadDeathMatch0"){
+
+
+            if (this.boolscramblebyadminroundend && this.strcurrentGametype != "SquadDeathMatch0")
+            {
                 DebugInfoSkill("^9" + this.strcurrentGametype + ": ^b^2Scrambling on roundend requested by an admin!");
                 this.boolscramblebyadminroundend = false;
                 this.boolfirstscrambler = true;
                 this.boolscramblefailed = false;
-                this.ExecuteCommand("procon.protected.tasks.add", "WaitScrambleTimer", "49", "1", "1",  "procon.protected.plugins.call", "TrueBalancer", "StartScrambler");
+                this.ExecuteCommand("procon.protected.tasks.add", "WaitScrambleTimer", "49", "1", "1", "procon.protected.plugins.call", "TrueBalancer", "StartScrambler");
             }
             else if ((this.strcurrentGametype.Contains("Conquest") || this.strcurrentGametype.Contains("TankSuperiority0") || this.strcurrentGametype.Contains("Scavenger0") || this.strcurrentGametype.Contains("AirSuperiority0") || this.strcurrentGametype.Contains("CarrierAssault") || this.strcurrentGametype.Contains("Chainlink")) && this.ynbenableSkillCONQUEST == enumBoolYesNo.Yes)
             {
@@ -2493,14 +2534,17 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             else if ((this.strcurrentGametype.Contains("Rush")) && this.ynbenableSkillRUSH == enumBoolYesNo.Yes)
             {
                 DebugInfoSkill("R - Gamemode: ^b" + this.strcurrentGametype);
-                if (this.intCurrentRoundCount == 1){
+                if (this.intCurrentRoundCount == 1)
+                {
                     DebugInfoSkill("Scramble needed ^bNEW MAP --> ^2Starting scrambler!^n Scrambling by:^b^4 " + this.ScrambleByRUSH);
                     //this.ExecuteCommand("procon.protected.send", "admin.say", this.strScrambleMessage , "all");
                     this.boolfirstscrambler = true;
                     this.boolscramblefailed = false;
-                    this.ExecuteCommand("procon.protected.tasks.add", "WaitScrambleTimer", "49", "1", "1",  "procon.protected.plugins.call", "TrueBalancer", "StartScrambler");
+                    this.ExecuteCommand("procon.protected.tasks.add", "WaitScrambleTimer", "49", "1", "1", "procon.protected.plugins.call", "TrueBalancer", "StartScrambler");
                     // StartScrambler();
-                } else {
+                }
+                else
+                {
                     DebugInfoSkill(this.strcurrentGametype + ": ^1^bNo reason to scramble!");
                 }
             }
@@ -2558,86 +2602,97 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             else if (this.strcurrentGametype.Contains("TeamDeathMatch") && this.ynbenableSkillTDM == enumBoolYesNo.Yes)
             {
                 DebugInfoSkill("TDM - Gamemode: ^b" + this.strcurrentGametype);
-                if (this.ynbScrambleMapTDM == enumBoolYesNo.Yes && this.intCurrentRoundCount == 1){
+                if (this.ynbScrambleMapTDM == enumBoolYesNo.Yes && this.intCurrentRoundCount == 1)
+                {
                     DebugInfoSkill("Scramble needed ^bNEW MAP --> ^2Starting scrambler!^n Scrambling by:^b^4 " + this.ScrambleByTDM);
                     //this.ExecuteCommand("procon.protected.send", "admin.say", this.strScrambleMessage , "all");
                     this.boolfirstscrambler = true;
                     this.boolscramblefailed = false;
-                    this.ExecuteCommand("procon.protected.tasks.add", "WaitScrambleTimer", "49", "1", "1",  "procon.protected.plugins.call", "TrueBalancer", "StartScrambler");
+                    this.ExecuteCommand("procon.protected.tasks.add", "WaitScrambleTimer", "49", "1", "1", "procon.protected.plugins.call", "TrueBalancer", "StartScrambler");
                     // StartScrambler();
-                } else if ((this.intwonTicketsTDM * this.intTicketcount/100) <= this.intTicketsdif && ( this.intCurrentRoundCount == 1 || this.ynbScrambleEveryRoundTDM == enumBoolYesNo.Yes)){
+                }
+                else if ((this.intwonTicketsTDM * this.intTicketcount / 100) <= this.intTicketsdif && (this.intCurrentRoundCount == 1 || this.ynbScrambleEveryRoundTDM == enumBoolYesNo.Yes))
+                {
                     DebugInfoSkill("Won with to much tickets^b --> ^1Starting scrambler! ^nScrambling by: ^b^4" + this.ScrambleByTDM);
-                    if (this.ynbScrambleEveryRoundTDM == enumBoolYesNo.Yes){
+                    if (this.ynbScrambleEveryRoundTDM == enumBoolYesNo.Yes)
+                    {
                         DebugInfoSkill("Ticketdifference checked every new round");
                     }
                     //this.ExecuteCommand("procon.protected.send", "admin.say", this.strScrambleMessage , "all");
                     this.boolfirstscrambler = true;
                     this.boolscramblefailed = false;
-                    this.ExecuteCommand("procon.protected.tasks.add", "WaitScrambleTimer", "49", "1", "1",  "procon.protected.plugins.call", "TrueBalancer", "StartScrambler");
+                    this.ExecuteCommand("procon.protected.tasks.add", "WaitScrambleTimer", "49", "1", "1", "procon.protected.plugins.call", "TrueBalancer", "StartScrambler");
                     // StartScrambler();
-                } else {
+                }
+                else
+                {
                     DebugInfoSkill(this.strcurrentGametype + ": ^1^bNo reason to scramble!");
                 }
-            }else
+            }
+            else
             {
                 DebugInfoSkill(this.strcurrentGametype + ": ^8^bGamemode not supported or EndRound-Scrambler turned off for this gamemode.");
             }
-            
-            
-//          if (!this.boolTeamsScrambled && this.intCurrentRoundCount == 1 && this.boolticketdif == true  && this.ynbenableSkill==enumBoolYesNo.Yes){
-/*          if (!this.boolTeamsScrambled && this.boolticketdif == true  && this.ynbenableSkill==enumBoolYesNo.Yes){
-                if(this.ynbScrambleMap == enumBoolYesNo.No && this.ynbScrambleEveryRound == enumBoolYesNo.Yes && this.strcurrentGametype != "squadrush0" && this.strcurrentGametype != "rushlarge0"){
-                    this.boolticketdif = false;
-                    DebugInfoSkill("Won with to much tickets --> Starting scrambler!");
-                    //this.ExecuteCommand("procon.protected.send", "admin.say", this.strScrambleMessage , "all");
-                    if (strcurrentGametype != "squaddeathmatch0"){
-                        this.boolfirstscrambler = true;
-                        this.boolscramblefailed = false;
-                        this.ExecuteCommand("procon.protected.tasks.add", "WaitScrambleTimer", "49", "1", "1",  "procon.protected.plugins.call", "TrueBalancer", "StartScrambler");
-                        // StartScrambler();
-                    }else if (strcurrentGametype != ""){
-                        this.ExecuteCommand("procon.protected.pluginconsole.write", "SkillBalancer:  Still no data or GameMode not supported: " + "I" + strcurrentGametype + "I" );
-                    }
-                }else if (this.intCurrentRoundCount == 1) {
-                    this.boolticketdif = false;
-                    DebugInfoSkill("Scramble needed NEW ROUND --> Starting scrambler!");
-                    //this.ExecuteCommand("procon.protected.send", "admin.say", this.strScrambleMessage , "all");
-                    if (strcurrentGametype != "squaddeathmatch0"){
-                        this.boolfirstscrambler = true;
-                        this.boolscramblefailed = false;
-                        this.ExecuteCommand("procon.protected.tasks.add", "WaitScrambleTimer", "49", "1", "1",  "procon.protected.plugins.call", "TrueBalancer", "StartScrambler");
-                        // StartScrambler();
-                    }else if (strcurrentGametype != ""){
-                        this.ExecuteCommand("procon.protected.pluginconsole.write", "SkillBalancer:  Still no data or GameMode not supported: " + "I" + strcurrentGametype + "I" );
-                    }
-                }else{
-                    DebugInfoSkill("Won with to much tickets BUT same map again.");
-                }
-            }
-            */
-            
+
+
+            //          if (!this.boolTeamsScrambled && this.intCurrentRoundCount == 1 && this.boolticketdif == true  && this.ynbenableSkill==enumBoolYesNo.Yes){
+            /*          if (!this.boolTeamsScrambled && this.boolticketdif == true  && this.ynbenableSkill==enumBoolYesNo.Yes){
+                            if(this.ynbScrambleMap == enumBoolYesNo.No && this.ynbScrambleEveryRound == enumBoolYesNo.Yes && this.strcurrentGametype != "squadrush0" && this.strcurrentGametype != "rushlarge0"){
+                                this.boolticketdif = false;
+                                DebugInfoSkill("Won with to much tickets --> Starting scrambler!");
+                                //this.ExecuteCommand("procon.protected.send", "admin.say", this.strScrambleMessage , "all");
+                                if (strcurrentGametype != "squaddeathmatch0"){
+                                    this.boolfirstscrambler = true;
+                                    this.boolscramblefailed = false;
+                                    this.ExecuteCommand("procon.protected.tasks.add", "WaitScrambleTimer", "49", "1", "1",  "procon.protected.plugins.call", "TrueBalancer", "StartScrambler");
+                                    // StartScrambler();
+                                }else if (strcurrentGametype != ""){
+                                    this.ExecuteCommand("procon.protected.pluginconsole.write", "SkillBalancer:  Still no data or GameMode not supported: " + "I" + strcurrentGametype + "I" );
+                                }
+                            }else if (this.intCurrentRoundCount == 1) {
+                                this.boolticketdif = false;
+                                DebugInfoSkill("Scramble needed NEW ROUND --> Starting scrambler!");
+                                //this.ExecuteCommand("procon.protected.send", "admin.say", this.strScrambleMessage , "all");
+                                if (strcurrentGametype != "squaddeathmatch0"){
+                                    this.boolfirstscrambler = true;
+                                    this.boolscramblefailed = false;
+                                    this.ExecuteCommand("procon.protected.tasks.add", "WaitScrambleTimer", "49", "1", "1",  "procon.protected.plugins.call", "TrueBalancer", "StartScrambler");
+                                    // StartScrambler();
+                                }else if (strcurrentGametype != ""){
+                                    this.ExecuteCommand("procon.protected.pluginconsole.write", "SkillBalancer:  Still no data or GameMode not supported: " + "I" + strcurrentGametype + "I" );
+                                }
+                            }else{
+                                DebugInfoSkill("Won with to much tickets BUT same map again.");
+                            }
+                        }
+                        */
+
             this.ExecuteCommand("procon.protected.send", "admin.listPlayers", "all");
-            
+
         }
-        
-        public virtual void OnRoundOverPlayers(List<CPlayerInfo> lstPlayers) { 
-            
-            foreach (KeyValuePair<string, CPlayerJoinInf> kvp in this.dicPlayerCache){
+
+        public virtual void OnRoundOverPlayers(List<CPlayerInfo> lstPlayers)
+        {
+
+            foreach (KeyValuePair<string, CPlayerJoinInf> kvp in this.dicPlayerCache)
+            {
                 if (this.dicPlayerCache[kvp.Key].playerWL != 1 && !dicPlayerCache[kvp.Key].IsCommander && !dicPlayerCache[kvp.Key].IsSpectator)
                 {
                     this.dicPlayerCache[kvp.Key].tobebalanced = true;
                 }
             }
-            
+
             int i = 1;
             this.dicPlayerScore.Clear();
             this.dicSquadScore.Clear();
             this.bestSquadTeamID = 0;
-            
-            foreach (CPlayerInfo cpiPlayer in lstPlayers){
+
+            foreach (CPlayerInfo cpiPlayer in lstPlayers)
+            {
                 double value = 0;
                 string tag = "";
-                if (this.dicPlayerCache.ContainsKey(cpiPlayer.SoldierName)) {   
+                if (this.dicPlayerCache.ContainsKey(cpiPlayer.SoldierName))
+                {
                     value = this.dicPlayerCache[cpiPlayer.SoldierName].playerValue;
                     tag = this.dicPlayerCache[cpiPlayer.SoldierName].tag;
                 }
@@ -2645,39 +2700,44 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 this.dicPlayerScore.Add(i, newEntry);
                 i++;
             }
-            
+
             bool Sortiert;
-            do{
-                Sortiert = true; 
-                for (int j = 1; j < this.dicPlayerScore.Count; j++) {
-                    if (this.dicPlayerScore[j].playerValue < this.dicPlayerScore[j+1].playerValue){
+            do
+            {
+                Sortiert = true;
+                for (int j = 1; j < this.dicPlayerScore.Count; j++)
+                {
+                    if (this.dicPlayerScore[j].playerValue < this.dicPlayerScore[j + 1].playerValue)
+                    {
                         CPlayerScoreInf temp = new CPlayerScoreInf(this.dicPlayerScore[j].playerName, this.dicPlayerScore[j].teamID, this.dicPlayerScore[j].playerSquad, this.dicPlayerScore[j].playerValue, false, false, this.dicPlayerScore[j].tag);
-                        this.dicPlayerScore[j] = this.dicPlayerScore[j+1];
-                        this.dicPlayerScore[j+1] = temp;
-                    Sortiert = false;
+                        this.dicPlayerScore[j] = this.dicPlayerScore[j + 1];
+                        this.dicPlayerScore[j + 1] = temp;
+                        Sortiert = false;
                     }
-                }  
+                }
             } while (!Sortiert);
-            
-            
+
+
             // bool Sortiert;
             // do{
-                // Sortiert = true; 
-                // for (int j = 1; j < this.dicPlayerScore.Count; j++) {
-                    // if (this.dicPlayerScore[j].playerScore < this.dicPlayerScore[j+1].playerScore){ 
-                        // CPlayerScoreInf temp = new CPlayerScoreInf(this.dicPlayerScore[j].playerName, this.dicPlayerScore[j].teamID, this.dicPlayerScore[j].playerSquad, this.dicPlayerScore[j].playerScore, false, false);
-                        // this.dicPlayerScore[j] = this.dicPlayerScore[j+1];
-                        // this.dicPlayerScore[j+1] = temp;
-                    // Sortiert = false;
-                    // }
-                // }  
+            // Sortiert = true; 
+            // for (int j = 1; j < this.dicPlayerScore.Count; j++) {
+            // if (this.dicPlayerScore[j].playerScore < this.dicPlayerScore[j+1].playerScore){ 
+            // CPlayerScoreInf temp = new CPlayerScoreInf(this.dicPlayerScore[j].playerName, this.dicPlayerScore[j].teamID, this.dicPlayerScore[j].playerSquad, this.dicPlayerScore[j].playerScore, false, false);
+            // this.dicPlayerScore[j] = this.dicPlayerScore[j+1];
+            // this.dicPlayerScore[j+1] = temp;
+            // Sortiert = false;
+            // }
+            // }  
             // } while (!Sortiert);
-            
-        }       
-            
-        public virtual void OnPlayerSpawned(string soldierName, Inventory spawnedInventory) { 
-         
-            if (this.boolLevelStart == false && this.boolLevelLoaded){
+
+        }
+
+        public virtual void OnPlayerSpawned(string soldierName, Inventory spawnedInventory)
+        {
+
+            if (this.boolLevelStart == false && this.boolLevelLoaded)
+            {
                 this.boolmessagesent = false;
                 this.boolfirstscrambler = false;
                 this.boolLevelLoaded = false;
@@ -2686,25 +2746,27 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 this.DebugInfoGuard("First Spawner: ^bRound started!");
                 this.DTLevelStart = DateTime.Now;
             }
-            
-            if (this.dicPlayerCache.ContainsKey(soldierName)) {
+
+            if (this.dicPlayerCache.ContainsKey(soldierName))
+            {
                 this.dicPlayerCache[soldierName].tobebalanced = false;
             }
             //string msg = soldierName + " spawned.";
             //this.ExecuteCommand("procon.protected.pluginconsole.write", msg);
         }
-        
-        public override void OnLogin() {
-             this.DebugInfo("=================OnLogin=============");
+
+        public override void OnLogin()
+        {
+            this.DebugInfo("=================OnLogin=============");
             //this.boolOnLogin = true;
             this.boolfirstwarningWL = false;
-            this.m_isPluginEnabled = true; 
+            this.m_isPluginEnabled = true;
             this.RegisterAllCommands();
             //this.boolOnLogin = true;
             this.boolLevelStart = false;
             this.boolLevelLoaded = true;
             this.boolFirstOP = false;
-            this.boolgametype = false; 
+            this.boolgametype = false;
             this.DTLevelStart = new DateTime();
             this.boolnoplayer = false;
             this.intScrambledPlayers = 0;
@@ -3143,24 +3205,31 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             }
         }
 
-        public override void OnListPlayers(List<CPlayerInfo> lstPlayers, CPlayerSubset cpsSubset) {
+        public override void OnListPlayers(List<CPlayerInfo> lstPlayers, CPlayerSubset cpsSubset)
+        {
             int numStatsFetch = this.intMaxPlayersToFetch;
             int numRemaining = lstPlayers.Count;
 
-            if (lstPlayers.Count == 0 && this.boolnoplayer == false){           
+            if (lstPlayers.Count == 0 && this.boolnoplayer == false)
+            {
                 this.boolnoplayer = true;
                 this.dicPlayerCache.Clear();
                 this.DebugInfo("^3^b" + lstPlayers.Count.ToString() + " Players on the server.");
                 return;
-            } else if (lstPlayers.Count != 0 && this.boolnoplayer) {
+            }
+            else if (lstPlayers.Count != 0 && this.boolnoplayer)
+            {
                 this.boolnoplayer = false;
-            } else if (lstPlayers.Count == 0) {
+            }
+            else if (lstPlayers.Count == 0)
+            {
                 return; // suppress debugging messages for empty server
             }
 
-            TimeSpan ScrambleTime  = new TimeSpan(0);
+            TimeSpan ScrambleTime = new TimeSpan(0);
             ScrambleTime = DateTime.Now - this.DTScramblestarted;
-            if (ScrambleTime.TotalSeconds > 20 && this.boolscrambleActive){
+            if (ScrambleTime.TotalSeconds > 20 && this.boolscrambleActive)
+            {
                 this.DebugInfoSkill("^b^8Was not able to scramble teams in 15 seconds! Teams partly scrambled.");
                 this.boolTeamsScrambled = true;
                 this.intScrambledPlayers = 0;
@@ -3168,16 +3237,18 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 this.boolscrambleActive = false;
                 this.intScrambleCount = 0;
             }
-            
-            if (!this.boolscrambleActive){
+
+            if (!this.boolscrambleActive)
+            {
                 List<String> removeFromCache = new List<String>();
-                
+
                 int numWithStats = 0;
-                foreach (String k in this.dicPlayerCache.Keys) {
+                foreach (String k in this.dicPlayerCache.Keys)
+                {
                     if (this.dicPlayerCache[k].statsFetched) ++numWithStats;
                 }
                 DebugInfoSkill("OnListPlayers: Players = " + lstPlayers.Count + " vs Known with stats = " + numWithStats);
-            
+
                 foreach (KeyValuePair<string, CPlayerJoinInf> kvp in this.dicPlayerCache)
                 {
                     if (this.m_isPluginEnabled == false) break;
@@ -3190,16 +3261,18 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                         if (cpiPlayer.SoldierName == kvp.Key)
                         {
                             boolplayerexists = true;
-                            if (this.dicPlayerCache[kvp.Key].teamID != cpiPlayer.TeamID){
-                                if(this.boolmanuellchange && this.dicPlayerCache[kvp.Key].teamID != 0 && kvp.Key != this.strMovedPlayer){
-                                    
+                            if (this.dicPlayerCache[kvp.Key].teamID != cpiPlayer.TeamID)
+                            {
+                                if (this.boolmanuellchange && this.dicPlayerCache[kvp.Key].teamID != 0 && kvp.Key != this.strMovedPlayer)
+                                {
+
                                     this.dicPlayerCache[kvp.Key].Playerjoined = DateTime.Now;
                                     this.dicPlayerCache[kvp.Key].playerWL = 0;
                                     this.DebugInfo("Switched Manually!");
-                                    
+
                                 }
                                 this.dicPlayerCache[kvp.Key].teamID = cpiPlayer.TeamID;
-                                
+
                             }
                             this.dicPlayerCache[kvp.Key].playerSquad = cpiPlayer.SquadID;
                             this.dicPlayerCache[kvp.Key].score = cpiPlayer.Score;
@@ -3288,15 +3361,24 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                             }
                             else if (this.strcurrentGametype.Contains("Rush"))
                             {
-                                if (this.ScrambleByRUSH == "Rank"){
+                                if (this.ScrambleByRUSH == "Rank")
+                                {
                                     this.dicPlayerCache[kvp.Key].playerValue = this.dicPlayerCache[kvp.Key].rank;
-                                }else if (this.ScrambleByRUSH == "Skill"){
+                                }
+                                else if (this.ScrambleByRUSH == "Skill")
+                                {
                                     this.dicPlayerCache[kvp.Key].playerValue = this.dicPlayerCache[kvp.Key].skill;
-                                }else if (this.ScrambleByRUSH == "SPM"){
+                                }
+                                else if (this.ScrambleByRUSH == "SPM")
+                                {
                                     this.dicPlayerCache[kvp.Key].playerValue = this.dicPlayerCache[kvp.Key].spm;
-                                }else if (this.ScrambleByRUSH == "SPMcombat"){
+                                }
+                                else if (this.ScrambleByRUSH == "SPMcombat")
+                                {
                                     this.dicPlayerCache[kvp.Key].playerValue = this.dicPlayerCache[kvp.Key].spmcombat;
-                                }else if (this.ScrambleByRUSH == "K/D"){
+                                }
+                                else if (this.ScrambleByRUSH == "K/D")
+                                {
                                     this.dicPlayerCache[kvp.Key].playerValue = this.dicPlayerCache[kvp.Key].kdr;
                                 }
                                 else if (this.ScrambleByRUSH == "TB-Value")
@@ -3360,15 +3442,24 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                             }
                             else if (this.strcurrentGametype.Contains("TeamDeathMatch"))
                             {
-                                if (this.ScrambleByTDM == "Rank"){
+                                if (this.ScrambleByTDM == "Rank")
+                                {
                                     this.dicPlayerCache[kvp.Key].playerValue = this.dicPlayerCache[kvp.Key].rank;
-                                }else if (this.ScrambleByTDM == "Skill"){
+                                }
+                                else if (this.ScrambleByTDM == "Skill")
+                                {
                                     this.dicPlayerCache[kvp.Key].playerValue = this.dicPlayerCache[kvp.Key].skill;
-                                }else if (this.ScrambleByTDM == "SPM"){
+                                }
+                                else if (this.ScrambleByTDM == "SPM")
+                                {
                                     this.dicPlayerCache[kvp.Key].playerValue = this.dicPlayerCache[kvp.Key].spm;
-                                }else if (this.ScrambleByTDM == "SPMcombat"){
+                                }
+                                else if (this.ScrambleByTDM == "SPMcombat")
+                                {
                                     this.dicPlayerCache[kvp.Key].playerValue = this.dicPlayerCache[kvp.Key].spmcombat;
-                                }else if (this.ScrambleByTDM == "K/D"){
+                                }
+                                else if (this.ScrambleByTDM == "K/D")
+                                {
                                     this.dicPlayerCache[kvp.Key].playerValue = this.dicPlayerCache[kvp.Key].kdr;
                                 }
                                 else if (this.ScrambleByTDM == "TB-Value")
@@ -3376,14 +3467,14 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                                     this.dicPlayerCache[kvp.Key].playerValue = this.dicPlayerCache[kvp.Key].TBvalue;
                                 }
                             }
-                            
-                            
-                            
-                            if ( (  ((IList<string>)this.strAWhitelistComplete).Contains(cpiPlayer.SoldierName) || ( ((IList<string>)this.strAClantagWhitelist).Contains(dicPlayerCache[cpiPlayer.SoldierName].tag) && dicPlayerCache[cpiPlayer.SoldierName].tag != String.Empty )  )   && this.ynbWhitelist == enumBoolYesNo.Yes)
+
+
+
+                            if ((((IList<string>)this.strAWhitelistComplete).Contains(cpiPlayer.SoldierName) || (((IList<string>)this.strAClantagWhitelist).Contains(dicPlayerCache[cpiPlayer.SoldierName].tag) && dicPlayerCache[cpiPlayer.SoldierName].tag != String.Empty)) && this.ynbWhitelist == enumBoolYesNo.Yes)
                             {
                                 this.dicPlayerCache[kvp.Key].playerWL = 1;
                             }
-                            
+
                             break;
                         }
                     }
@@ -3397,7 +3488,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                         //PlayersOnServer.Remove(kvp.Key);
                     }
                 }
-                
+
                 foreach (String s in removeFromCache)
                 {
                     if (this.dicPlayerCache.ContainsKey(s))
@@ -3410,21 +3501,23 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 foreach (CPlayerInfo cpiPlayer in lstPlayers)
                 {
                     if (this.m_isPluginEnabled == false) break;
-                    
+
                     --numRemaining;
 
                     if (this.dicPlayerCache.ContainsKey(cpiPlayer.SoldierName) == true && this.dicPlayerCache[cpiPlayer.SoldierName].statsFetched)
                     {
-                        if (this.dicPlayerCache[cpiPlayer.SoldierName].teamID != cpiPlayer.TeamID){
-                                if(this.boolmanuellchange && this.dicPlayerCache[cpiPlayer.SoldierName].teamID != 0 && cpiPlayer.SoldierName != this.strMovedPlayer){
-                                    
-                                    this.dicPlayerCache[cpiPlayer.SoldierName].Playerjoined = DateTime.Now;
-                                    this.dicPlayerCache[cpiPlayer.SoldierName].playerWL = 0;
-                                    this.DebugInfo("Switched Manually!(2)");
-                                    
-                                }
-                                this.dicPlayerCache[cpiPlayer.SoldierName].teamID = cpiPlayer.TeamID;
-                                
+                        if (this.dicPlayerCache[cpiPlayer.SoldierName].teamID != cpiPlayer.TeamID)
+                        {
+                            if (this.boolmanuellchange && this.dicPlayerCache[cpiPlayer.SoldierName].teamID != 0 && cpiPlayer.SoldierName != this.strMovedPlayer)
+                            {
+
+                                this.dicPlayerCache[cpiPlayer.SoldierName].Playerjoined = DateTime.Now;
+                                this.dicPlayerCache[cpiPlayer.SoldierName].playerWL = 0;
+                                this.DebugInfo("Switched Manually!(2)");
+
+                            }
+                            this.dicPlayerCache[cpiPlayer.SoldierName].teamID = cpiPlayer.TeamID;
+
                         }
                         this.dicPlayerCache[cpiPlayer.SoldierName].playerSquad = cpiPlayer.SquadID;
                         this.dicPlayerCache[cpiPlayer.SoldierName].score = cpiPlayer.Score;
@@ -3512,15 +3605,24 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                         }
                         else if (this.strcurrentGametype.Contains("Rush"))
                         {
-                            if (this.ScrambleByRUSH == "Rank"){
+                            if (this.ScrambleByRUSH == "Rank")
+                            {
                                 this.dicPlayerCache[cpiPlayer.SoldierName].playerValue = this.dicPlayerCache[cpiPlayer.SoldierName].rank;
-                            }else if (this.ScrambleByRUSH == "Skill"){
+                            }
+                            else if (this.ScrambleByRUSH == "Skill")
+                            {
                                 this.dicPlayerCache[cpiPlayer.SoldierName].playerValue = this.dicPlayerCache[cpiPlayer.SoldierName].skill;
-                            }else if (this.ScrambleByRUSH == "SPM"){
+                            }
+                            else if (this.ScrambleByRUSH == "SPM")
+                            {
                                 this.dicPlayerCache[cpiPlayer.SoldierName].playerValue = this.dicPlayerCache[cpiPlayer.SoldierName].spm;
-                            }else if (this.ScrambleByRUSH == "SPMcombat"){
+                            }
+                            else if (this.ScrambleByRUSH == "SPMcombat")
+                            {
                                 this.dicPlayerCache[cpiPlayer.SoldierName].playerValue = this.dicPlayerCache[cpiPlayer.SoldierName].spmcombat;
-                            }else if (this.ScrambleByRUSH == "K/D"){
+                            }
+                            else if (this.ScrambleByRUSH == "K/D")
+                            {
                                 this.dicPlayerCache[cpiPlayer.SoldierName].playerValue = this.dicPlayerCache[cpiPlayer.SoldierName].kdr;
                             }
                             else if (this.ScrambleByRUSH == "TB-Value")
@@ -3584,15 +3686,24 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                         }
                         else if (this.strcurrentGametype.Contains("TeamDeathMatch"))
                         {
-                            if (this.ScrambleByTDM == "Rank"){
+                            if (this.ScrambleByTDM == "Rank")
+                            {
                                 this.dicPlayerCache[cpiPlayer.SoldierName].playerValue = this.dicPlayerCache[cpiPlayer.SoldierName].rank;
-                            }else if (this.ScrambleByTDM == "Skill"){
+                            }
+                            else if (this.ScrambleByTDM == "Skill")
+                            {
                                 this.dicPlayerCache[cpiPlayer.SoldierName].playerValue = this.dicPlayerCache[cpiPlayer.SoldierName].skill;
-                            }else if (this.ScrambleByTDM == "SPM"){
+                            }
+                            else if (this.ScrambleByTDM == "SPM")
+                            {
                                 this.dicPlayerCache[cpiPlayer.SoldierName].playerValue = this.dicPlayerCache[cpiPlayer.SoldierName].spm;
-                            }else if (this.ScrambleByTDM == "SPMcombat"){
+                            }
+                            else if (this.ScrambleByTDM == "SPMcombat")
+                            {
                                 this.dicPlayerCache[cpiPlayer.SoldierName].playerValue = this.dicPlayerCache[cpiPlayer.SoldierName].spmcombat;
-                            }else if (this.ScrambleByTDM == "K/D"){
+                            }
+                            else if (this.ScrambleByTDM == "K/D")
+                            {
                                 this.dicPlayerCache[cpiPlayer.SoldierName].playerValue = this.dicPlayerCache[cpiPlayer.SoldierName].kdr;
                             }
                             else if (this.ScrambleByTDM == "TB-Value")
@@ -3600,10 +3711,10 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                                 this.dicPlayerCache[cpiPlayer.SoldierName].playerValue = this.dicPlayerCache[cpiPlayer.SoldierName].TBvalue;
                             }
                         }
-                        
-                        
-                        
-                        if ( (  ((IList<string>)this.strAWhitelistComplete).Contains(cpiPlayer.SoldierName) || ( ((IList<string>)this.strAClantagWhitelist).Contains(dicPlayerCache[cpiPlayer.SoldierName].tag) && dicPlayerCache[cpiPlayer.SoldierName].tag != String.Empty )  )   && this.ynbWhitelist == enumBoolYesNo.Yes)
+
+
+
+                        if ((((IList<string>)this.strAWhitelistComplete).Contains(cpiPlayer.SoldierName) || (((IList<string>)this.strAClantagWhitelist).Contains(dicPlayerCache[cpiPlayer.SoldierName].tag) && dicPlayerCache[cpiPlayer.SoldierName].tag != String.Empty)) && this.ynbWhitelist == enumBoolYesNo.Yes)
                         {
                             this.dicPlayerCache[cpiPlayer.SoldierName].playerWL = 1;
                         }
@@ -3638,9 +3749,9 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                         }
 
                         double ValueTemp = 0;
-                        
+
                         double tempskill = stats.skill;
-                        
+
                         if (tempskill == 0)
                             tempskill = (this.skillA + this.skillB) / 2;
                         else if (tempskill < 0)
@@ -3746,15 +3857,24 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                         }
                         else if (this.strcurrentGametype.Contains("Rush"))
                         {
-                            if (this.ScrambleByRUSH == "Rank"){
+                            if (this.ScrambleByRUSH == "Rank")
+                            {
                                 ValueTemp = stats.rank;
-                            }else if (this.ScrambleByRUSH == "Skill"){
+                            }
+                            else if (this.ScrambleByRUSH == "Skill")
+                            {
                                 ValueTemp = tempskill;
-                            }else if (this.ScrambleByRUSH == "SPM"){
+                            }
+                            else if (this.ScrambleByRUSH == "SPM")
+                            {
                                 ValueTemp = tempspm;
-                            }else if (this.ScrambleByRUSH == "SPMcombat"){
+                            }
+                            else if (this.ScrambleByRUSH == "SPMcombat")
+                            {
                                 ValueTemp = tempspmcombat;
-                            }else if (this.ScrambleByRUSH == "K/D"){
+                            }
+                            else if (this.ScrambleByRUSH == "K/D")
+                            {
                                 ValueTemp = tempkdr;
                             }
                             else if (this.ScrambleByRUSH == "TB-Value")
@@ -3818,15 +3938,24 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                         }
                         else if (this.strcurrentGametype.Contains("TeamDeathMatch"))
                         {
-                            if (this.ScrambleByTDM == "Rank"){
+                            if (this.ScrambleByTDM == "Rank")
+                            {
                                 ValueTemp = stats.rank;
-                            }else if (this.ScrambleByTDM == "Skill"){
+                            }
+                            else if (this.ScrambleByTDM == "Skill")
+                            {
                                 ValueTemp = tempskill;
-                            }else if (this.ScrambleByTDM == "SPM"){
+                            }
+                            else if (this.ScrambleByTDM == "SPM")
+                            {
                                 ValueTemp = tempspm;
-                            }else if (this.ScrambleByTDM == "SPMcombat"){
+                            }
+                            else if (this.ScrambleByTDM == "SPMcombat")
+                            {
                                 ValueTemp = tempspmcombat;
-                            }else if (this.ScrambleByTDM == "K/D"){
+                            }
+                            else if (this.ScrambleByTDM == "K/D")
+                            {
                                 ValueTemp = tempkdr;
                             }
                             else if (this.ScrambleByTDM == "TB-Value")
@@ -3867,27 +3996,28 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                             }
                             //this.ExecuteCommand("procon.protected.pluginconsole.write", spm.ToString());
                         }
-                        
+
                     }
                 }
-                 
-                if (this.ynbWhitelist == enumBoolYesNo.Yes && this.ynbincludeVIPlist == enumBoolYesNo.Yes) {
-                this.ExecuteCommand("procon.protected.send", "reservedSlotsList.list");
+
+                if (this.ynbWhitelist == enumBoolYesNo.Yes && this.ynbincludeVIPlist == enumBoolYesNo.Yes)
+                {
+                    this.ExecuteCommand("procon.protected.send", "reservedSlotsList.list");
                 }
-                 
-                 
+
+
                 this.strMovedPlayer = "";
                 this.boolmanuellchange = false;
                 this.DebugInfo("-------OP-------");
-                
-                
+
+
                 string printSoldier = "";
                 string strPlayerlist = "";
                 string strPLTeam1 = "";
                 string strPLTeam2 = "";
                 string strPLNeutral = "";
-                
-                
+
+
                 /*  Dictionary<string, CPlayerJoinInf> dicSorted = new Dictionary<string, CPlayerJoinInf>();
                 
                 dicSorted = from k in dicPlayerCache.Keys
@@ -3907,7 +4037,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     // DateTime maxValueJoined = new DateTime();
                     double minpoints = 100000000;
                     KeyValuePair<string, CPlayerJoinInf> kvplastjoiner = new KeyValuePair<string, CPlayerJoinInf>();
-                    
+
                     foreach (KeyValuePair<string, CPlayerJoinInf> kvp2 in this.dicPlayerCache)
                     {
                         if (this.dicPlayerCache[kvp2.Key].score <= minpoints && dicPlayerSorted.ContainsKey(kvp2.Key) == false)
@@ -3916,83 +4046,90 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                             kvplastjoiner = kvp2;
                         }
                     }
-                    dicPlayerSorted.Add(kvplastjoiner.Key, kvplastjoiner.Value);    
+                    dicPlayerSorted.Add(kvplastjoiner.Key, kvplastjoiner.Value);
                 }
-                
-                
+
+
                 foreach (KeyValuePair<string, CPlayerJoinInf> kvp in dicPlayerSorted)
                 {
                     printSoldier = kvp.Key.Replace("{", "(");
                     printSoldier = printSoldier.Replace("}", ")");
-                    if (dicPlayerSorted[kvp.Key].teamID == 1){
+                    if (dicPlayerSorted[kvp.Key].teamID == 1)
+                    {
                         strPLTeam1 = strPLTeam1 + "^0^n[" + dicPlayerSorted[kvp.Key].tag + "]^b" + printSoldier + "^n:^2" + Convert.ToString(dicPlayerSorted[kvp.Key].playerWL) +
                         "^0.^1" + Convert.ToString(dicPlayerSorted[kvp.Key].playerSquad) + " - ^i^3" + dicPlayerSorted[kvp.Key].TBvalue.ToString("F1") + "^0/^3" + dicPlayerSorted[kvp.Key].rank.ToString("F2") + "^0/^3" + dicPlayerSorted[kvp.Key].skill.ToString("F2") + "^0/^3" + dicPlayerSorted[kvp.Key].spm.ToString("F2") + "^0/^3" +
                         dicPlayerSorted[kvp.Key].spmcombat.ToString("F2") + "^0/^3" + dicPlayerSorted[kvp.Key].kdr.ToString("F2") + "^b^4 -=- ";
-                    }else if (dicPlayerSorted[kvp.Key].teamID == 2){
+                    }
+                    else if (dicPlayerSorted[kvp.Key].teamID == 2)
+                    {
                         strPLTeam2 = strPLTeam2 + "^0^n[" + dicPlayerSorted[kvp.Key].tag + "]^b" + printSoldier + "^n:^2" + Convert.ToString(dicPlayerSorted[kvp.Key].playerWL) +
                         "^0.^1" + Convert.ToString(dicPlayerSorted[kvp.Key].playerSquad) + " - ^i^3" + dicPlayerSorted[kvp.Key].TBvalue.ToString("F1") + "^0/^3" + dicPlayerSorted[kvp.Key].rank.ToString("F2") + "^0/^3" + dicPlayerSorted[kvp.Key].skill.ToString("F2") + "^0/^3" + dicPlayerSorted[kvp.Key].spm.ToString("F2") + "^0/^3" +
                         dicPlayerSorted[kvp.Key].spmcombat.ToString("F2") + "^0/^3" + dicPlayerSorted[kvp.Key].kdr.ToString("F2") + "^b^4 -=- ";
-                    }else{
+                    }
+                    else
+                    {
                         strPLNeutral = strPLNeutral + "^0^n[" + dicPlayerSorted[kvp.Key].tag + "]^b" + printSoldier + "^n:^2" + Convert.ToString(dicPlayerSorted[kvp.Key].playerWL) +
                         "^0.^1" + Convert.ToString(dicPlayerSorted[kvp.Key].playerSquad) + " - ^i^3" + dicPlayerSorted[kvp.Key].TBvalue.ToString("F1") + "^0/^3" + dicPlayerSorted[kvp.Key].rank.ToString("F2") + "^0/^3" + dicPlayerSorted[kvp.Key].skill.ToString("F2") + "^0/^3" + dicPlayerSorted[kvp.Key].spm.ToString("F2") + "^0/^3" +
                         dicPlayerSorted[kvp.Key].spmcombat.ToString("F2") + "^0/^3" + dicPlayerSorted[kvp.Key].kdr.ToString("F2") + "^b^4 -=- ";
                     }
                 }
-            
-    /*          foreach (KeyValuePair<string, CPlayerJoinInf> kvp in this.dicPlayerCache)
-                {
-                    printSoldier = kvp.Key.Replace("{", "(");
-                    printSoldier = printSoldier.Replace("}", ")");
-                    if (this.dicPlayerCache[kvp.Key].teamID == 1){
-                        strPLTeam1 = strPLTeam1 + Convert.ToString(this.dicPlayerCache[kvp.Key].playerWL) + 
-                        "." + Convert.ToString(this.dicPlayerCache[kvp.Key].playerSquad) + "." + 
-                        this.dicPlayerCache[kvp.Key].Playerjoined.ToString("HH:mm:ss") + "-" + printSoldier + " -=- ";
-                    }else if (this.dicPlayerCache[kvp.Key].teamID == 2){
-                        strPLTeam2 = strPLTeam2 + Convert.ToString(this.dicPlayerCache[kvp.Key].playerWL) + 
-                        "." + Convert.ToString(this.dicPlayerCache[kvp.Key].playerSquad) + "." + 
-                        this.dicPlayerCache[kvp.Key].Playerjoined.ToString("HH:mm:ss") + "-" + printSoldier + " -=- ";
-                    }else{
-                        strPLNeutral = strPLNeutral + Convert.ToString(this.dicPlayerCache[kvp.Key].playerWL) + 
-                        "." + Convert.ToString(this.dicPlayerCache[kvp.Key].playerSquad) + "." + 
-                        this.dicPlayerCache[kvp.Key].Playerjoined.ToString("HH:mm:ss") + "-" + printSoldier + " -=- ";
-                    }
-                } */
-                            
+
+                /*          foreach (KeyValuePair<string, CPlayerJoinInf> kvp in this.dicPlayerCache)
+                            {
+                                printSoldier = kvp.Key.Replace("{", "(");
+                                printSoldier = printSoldier.Replace("}", ")");
+                                if (this.dicPlayerCache[kvp.Key].teamID == 1){
+                                    strPLTeam1 = strPLTeam1 + Convert.ToString(this.dicPlayerCache[kvp.Key].playerWL) + 
+                                    "." + Convert.ToString(this.dicPlayerCache[kvp.Key].playerSquad) + "." + 
+                                    this.dicPlayerCache[kvp.Key].Playerjoined.ToString("HH:mm:ss") + "-" + printSoldier + " -=- ";
+                                }else if (this.dicPlayerCache[kvp.Key].teamID == 2){
+                                    strPLTeam2 = strPLTeam2 + Convert.ToString(this.dicPlayerCache[kvp.Key].playerWL) + 
+                                    "." + Convert.ToString(this.dicPlayerCache[kvp.Key].playerSquad) + "." + 
+                                    this.dicPlayerCache[kvp.Key].Playerjoined.ToString("HH:mm:ss") + "-" + printSoldier + " -=- ";
+                                }else{
+                                    strPLNeutral = strPLNeutral + Convert.ToString(this.dicPlayerCache[kvp.Key].playerWL) + 
+                                    "." + Convert.ToString(this.dicPlayerCache[kvp.Key].playerSquad) + "." + 
+                                    this.dicPlayerCache[kvp.Key].Playerjoined.ToString("HH:mm:ss") + "-" + printSoldier + " -=- ";
+                                }
+                            } */
+
                 strPlayerlist = "\n^b^4TEAM 1:^n " + strPLTeam1 + "\n\n^bTEAM 2:^n " + strPLTeam2 + "\n\n^bNeutral:^n " + strPLNeutral;
-                
+
                 this.DebugInfo(strPlayerlist);
                 this.DebugInfo("Online whitelisted players: " + whitelisttemp);
-                
+
                 //this.DebugInfo("WaitSeconds: " + this.intWaitSeconds.ToString());
 
-            
+
                 this.TSLevelStartWait = DateTime.Now - this.DTLevelStart;
                 if (this.boolLevelStart && this.TSLevelStartWait.TotalSeconds > 30)
                 {
-                        if (this.boolFirstOP == false)
-                        {
-                            this.boolFirstOP = true;                    
-                        }   
+                    if (this.boolFirstOP == false)
+                    {
+                        this.boolFirstOP = true;
+                    }
 
-                        if (strcurrentGametype != "squaddeathmatch0")
+                    if (strcurrentGametype != "squaddeathmatch0")
+                    {
+                        // if ( this.intScoreTeamA > this.intminScore && this.intScoreTeamB > this.intminScore){
+                        CompareTeams();
+                        // } else {
+                        // this.DebugInfo("Not comparing teams. Tickets till Endround: TeamA: " + this.intScoreTeamA + ", TeamB: " + this.intScoreTeamB  );
+                        // }
+                    }
+                    else if (strcurrentGametype != "")
+                    {
+                        if (this.boolgametype == false)
                         {
-                            // if ( this.intScoreTeamA > this.intminScore && this.intScoreTeamB > this.intminScore){
-                                CompareTeams();
-                            // } else {
-                                // this.DebugInfo("Not comparing teams. Tickets till Endround: TeamA: " + this.intScoreTeamA + ", TeamB: " + this.intScoreTeamB  );
-                            // }
+                            this.boolgametype = true;
+                            this.ExecuteCommand("procon.protected.pluginconsole.write", "TrueBalancer:  Still no data or GameMode not supported: " + "I" + strcurrentGametype + "I");
+
                         }
-                        else if (strcurrentGametype != "")
-                        {
-                            if (this.boolgametype == false)
-                            {
-                                this.boolgametype = true;
-                                this.ExecuteCommand("procon.protected.pluginconsole.write", "TrueBalancer:  Still no data or GameMode not supported: " + "I" + strcurrentGametype + "I" );
-                                
-                            }
-                        }   
-                    } 
-            }else {
+                    }
+                }
+            }
+            else
+            {
 
                 DebugInfoSkill("^3OnListPlayers, skill scramble in progress");
 
@@ -4000,14 +4137,19 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 double afterscrambleTeamSizeA = 0;
                 double afterscrambleValueB = 0;
                 double afterscrambleTeamSizeB = 0;
-                if (this.boolscrambleNow && this.boolRunOnList){
+                if (this.boolscrambleNow && this.boolRunOnList)
+                {
                     this.boolTeamsScrambled = true;
-                    foreach (KeyValuePair<int, CPlayerScoreInf> kvp in this.dicPlayerScore){
+                    foreach (KeyValuePair<int, CPlayerScoreInf> kvp in this.dicPlayerScore)
+                    {
                         if (this.m_isPluginEnabled == false) break;
-                        foreach (CPlayerInfo cpiPlayer in lstPlayers){
+                        foreach (CPlayerInfo cpiPlayer in lstPlayers)
+                        {
                             if (this.m_isPluginEnabled == false) break;
-                            if (this.dicPlayerScore[kvp.Key].playerName == cpiPlayer.SoldierName){
-                                if (cpiPlayer.TeamID == this.dicPlayerScore[kvp.Key].teamID && cpiPlayer.SquadID == this.dicPlayerScore[kvp.Key].playerSquad){
+                            if (this.dicPlayerScore[kvp.Key].playerName == cpiPlayer.SoldierName)
+                            {
+                                if (cpiPlayer.TeamID == this.dicPlayerScore[kvp.Key].teamID && cpiPlayer.SquadID == this.dicPlayerScore[kvp.Key].playerSquad)
+                                {
                                     this.dicPlayerScore[kvp.Key].scrambled = true;
                                     if (cpiPlayer.TeamID == 1)
                                     {
@@ -4019,16 +4161,19 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                                         afterscrambleValueB = afterscrambleValueB + this.dicPlayerScore[kvp.Key].playerValue;
                                         afterscrambleTeamSizeB++;
                                     }
-                                }else{
+                                }
+                                else
+                                {
                                     this.dicPlayerScore[kvp.Key].scrambled = false;
                                     this.boolTeamsScrambled = false;
-                                    this.DebugInfoSkill("^3Not scrambled: ^b" + cpiPlayer.SoldierName + "^n. Is in: ^b" + cpiPlayer.TeamID.ToString() +"."+cpiPlayer.SquadID +"^n - Goal: ^b" + this.dicPlayerScore[kvp.Key].teamID .ToString() +  "." + this.dicPlayerScore[kvp.Key].playerSquad.ToString());
+                                    this.DebugInfoSkill("^3Not scrambled: ^b" + cpiPlayer.SoldierName + "^n. Is in: ^b" + cpiPlayer.TeamID.ToString() + "." + cpiPlayer.SquadID + "^n - Goal: ^b" + this.dicPlayerScore[kvp.Key].teamID.ToString() + "." + this.dicPlayerScore[kvp.Key].playerSquad.ToString());
                                 }
                                 break;
                             }
                         }
                     }
-                    if (this.boolTeamsScrambled) {
+                    if (this.boolTeamsScrambled)
+                    {
                         this.boolRunOnList = false;
                         this.DebugInfoSkill("^b^2Teams are scrambled now!");
                         this.DebugInfoSkill("Team 1 Value: ^b^2" + afterscrambleValueA / afterscrambleTeamSizeA + "^9*^7" + afterscrambleTeamSizeA + "^n^9 --- Team 2 Value: ^b^2" + afterscrambleValueB / afterscrambleTeamSizeB + "^9*^7" + afterscrambleTeamSizeB);
@@ -4039,29 +4184,37 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                         this.boolscrambleNow = false;
                         this.boolscrambleActive = false;
                         this.intScrambleCount = 0;
-                        if (this.boolLevelStart){
-                            if (this.ynbScrambleMessage == enumBoolYesNo.Yes){
-                                if (this.strScrambleDoneMsg !=""){
+                        if (this.boolLevelStart)
+                        {
+                            if (this.ynbScrambleMessage == enumBoolYesNo.Yes)
+                            {
+                                if (this.strScrambleDoneMsg != "")
+                                {
                                     if (this.boolVirtual)
                                     {
                                         this.ExecuteCommand("procon.protected.pluginconsole.write", "^b[TB] VIRTUAL:^n say all - " + strScrambleDoneMsg);
                                     }
                                     else
                                     {
-                                        this.ExecuteCommand("procon.protected.send", "admin.say", strScrambleDoneMsg , "all");
+                                        this.ExecuteCommand("procon.protected.send", "admin.say", strScrambleDoneMsg, "all");
                                     }
-                                    if (this.ynbYellScrambleManuall == enumBoolYesNo.Yes && !this.boolVirtual){
-                                        this.ExecuteCommand("procon.protected.send", "admin.yell", strScrambleDoneMsg , "30");
+                                    if (this.ynbYellScrambleManuall == enumBoolYesNo.Yes && !this.boolVirtual)
+                                    {
+                                        this.ExecuteCommand("procon.protected.send", "admin.yell", strScrambleDoneMsg, "30");
                                     }
                                 }
                             }
-                        }                   
-                    } else{
+                        }
+                    }
+                    else
+                    {
                         this.boolRunOnList = false;
                         ScrambleNow();
                     }
-                    
-                } else  {
+
+                }
+                else
+                {
                     DebugInfoSkill("^3Scrambler Active OnList!");
                 }
             }
@@ -4072,25 +4225,28 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             this.RegisterAllCommands();
             DebugInfoSkill("OnListPlayers handler returning");
         }
-        
-        public virtual void OnPlayerSquadChange(string soldierName, int teamId, int squadId) {
-        
-            TimeSpan ScrambleTime  = new TimeSpan(0);
+
+        public virtual void OnPlayerSquadChange(string soldierName, int teamId, int squadId)
+        {
+
+            TimeSpan ScrambleTime = new TimeSpan(0);
             ScrambleTime = DateTime.Now - this.DTScramblestarted;
-            
-            if (!this.boolscrambleActive && ScrambleTime.TotalSeconds > 30){
+
+            if (!this.boolscrambleActive && ScrambleTime.TotalSeconds > 30)
+            {
                 if (this.boolLevelStart == true && !this.boolplayerleft)
-                {   
+                {
                     this.DebugInfo("player squad change: ^b" + soldierName + " ^n" + this.boolLevelStart.ToString());
                     this.dicPlayerCache[soldierName].playerSquad = squadId;
                     //this.ExecuteCommand("procon.protected.send", "admin.listPlayers", "all");
-                } 
+                }
             }
             if (this.boolplayerleft)
                 this.boolplayerleft = false;
         }
-        
-        public override void OnPlayerTeamChange(string strSoldierName, int iTeamID, int iSquadID) {
+
+        public override void OnPlayerTeamChange(string strSoldierName, int iTeamID, int iSquadID)
+        {
 
 
             if (DateTime.Now > this.EndRoundTime && this.showfirstmove == false && this.dicPlayerCache[strSoldierName].teamID != 0)
@@ -4101,7 +4257,8 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             }
 
             this.TSLevelStartWait = DateTime.Now - this.DTLevelStart;
-            if (!this.boolscrambleActive){
+            if (!this.boolscrambleActive)
+            {
 
                 if (this.boolLevelStart == true && this.boolFirstOP == true)
                 {
@@ -4704,7 +4861,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                                     else if (this.strcurrentGametype.Contains("Elimination"))
                                     {
                                         this.DebugInfoGuard("^4^bSorting NewJoiners." + "\n");
-                                    } 
+                                    }
 
                                 }
                                 else this.DebugInfoGuard("\n");
@@ -5014,7 +5171,8 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                                 {
                                     if (this.boolVirtual)
                                     {
-                                        this.ExecuteCommand("procon.protected.pluginconsole.write", "^b[TB] VIRTUAL^n admin.movePlayer " + strSoldierName + " " + fromteam.ToString() + " " + this.dicPlayerCache[strSoldierName].playerSquad.ToString() + " true");                                    }
+                                        this.ExecuteCommand("procon.protected.pluginconsole.write", "^b[TB] VIRTUAL^n admin.movePlayer " + strSoldierName + " " + fromteam.ToString() + " " + this.dicPlayerCache[strSoldierName].playerSquad.ToString() + " true");
+                                    }
                                     else
                                     {
                                         this.ExecuteCommand("procon.protected.send", "admin.movePlayer", strSoldierName, fromteam.ToString(), this.dicPlayerCache[strSoldierName].playerSquad.ToString(), "true");
@@ -5177,80 +5335,84 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     }
                 }
             }
-        } 
+        }
 
-        public override void OnPlayerLeft(CPlayerInfo cpiPlayer) {
-        
+        public override void OnPlayerLeft(CPlayerInfo cpiPlayer)
+        {
+
             this.boolplayerleft = true;
             // int WaitforLevel = 0;
 
-            
+
             // WaitforLevel = this.TSLevelStartWait.Hours * 3600 + this.TSLevelStartWait.Minutes * 60 + this.TSLevelStartWait.Seconds;
-            
+
             this.DebugInfo("player left: ^0^b" + cpiPlayer.SoldierName + "^n^0 " + this.boolLevelStart.ToString());
 
             // if (this.boolLevelStart == true)
             // {        
-                // this.ExecuteCommand("procon.protected.send", "admin.listPlayers", "all");
+            // this.ExecuteCommand("procon.protected.send", "admin.listPlayers", "all");
             // } 
-            
-        string printSoldier = "";
-        printSoldier = cpiPlayer.SoldierName.Replace("{", "(");
-        printSoldier = printSoldier.Replace("}", ")");
-        
-        if (this.dicPlayerCache.ContainsKey(cpiPlayer.SoldierName))
+
+            string printSoldier = "";
+            printSoldier = cpiPlayer.SoldierName.Replace("{", "(");
+            printSoldier = printSoldier.Replace("}", ")");
+
+            if (this.dicPlayerCache.ContainsKey(cpiPlayer.SoldierName))
             {
                 this.DebugInfo("In PlayerDic. Player Deleted.");
                 this.dicPlayerCache.Remove(cpiPlayer.SoldierName);
-            }  
-        
-        int toberomved = -1;
-        foreach (KeyValuePair<int, CPlayerScoreInf> kvp in this.dicPlayerScore){
-            if (this.dicPlayerScore[kvp.Key].playerName== cpiPlayer.SoldierName){
-                toberomved = kvp.Key;
-                break;
             }
-        }
-        if (toberomved > -1){
-            this.dicPlayerScore.Remove(toberomved);
-        }
-        
-        this.TSLevelStartWait = DateTime.Now - this.DTLevelStart;
-        if (this.boolFirstOP && this.boolLevelStart)
+
+            int toberomved = -1;
+            foreach (KeyValuePair<int, CPlayerScoreInf> kvp in this.dicPlayerScore)
+            {
+                if (this.dicPlayerScore[kvp.Key].playerName == cpiPlayer.SoldierName)
+                {
+                    toberomved = kvp.Key;
+                    break;
+                }
+            }
+            if (toberomved > -1)
+            {
+                this.dicPlayerScore.Remove(toberomved);
+            }
+
+            this.TSLevelStartWait = DateTime.Now - this.DTLevelStart;
+            if (this.boolFirstOP && this.boolLevelStart)
             {
                 if (strcurrentGametype != "squaddeathmatch0")
+                {
+                    // if ( this.intScoreTeamA > this.intminScore && this.intScoreTeamB > this.intminScore){
+                    CompareTeams();
+                    // } else {
+                    // this.DebugInfo("Not comparing teams. Tickets till Endround: TeamA: " + this.intScoreTeamA + ", TeamB: " + this.intScoreTeamB);
+                    // }
+                }
+                else if (strcurrentGametype != "")
+                {
+                    if (this.boolgametype == false)
                     {
-                        // if ( this.intScoreTeamA > this.intminScore && this.intScoreTeamB > this.intminScore){
-                            CompareTeams();
-                        // } else {
-                            // this.DebugInfo("Not comparing teams. Tickets till Endround: TeamA: " + this.intScoreTeamA + ", TeamB: " + this.intScoreTeamB);
-                        // }
+                        this.boolgametype = true;
+                        this.ExecuteCommand("procon.protected.pluginconsole.write", "TrueBalancer:  Still no data or GameMode not supported: " + "I" + strcurrentGametype + "I");
                     }
-                    else if (strcurrentGametype != "")
-                    {
-                        if (this.boolgametype == false)
-                        {
-                            this.boolgametype = true;
-                            this.ExecuteCommand("procon.protected.pluginconsole.write", "TrueBalancer:  Still no data or GameMode not supported: " + "I" + strcurrentGametype + "I" );  
-                        }
-                    }
+                }
             }
             else
             {
                 this.DebugInfo("Waiting for FirstOP (plyrLeft)");
-            } 
+            }
         }
 
-        public void OnPlayerKilled(Kill killInfo) {
+        public void OnPlayerKilled(Kill killInfo)
+        {
 
-            
-            
+
+
             if (killInfo == null)
-                    return;
-            
-            if(this.OnCommandMove.ContainsKey(killInfo.Victim.SoldierName))
+                return;
 
-            {            
+            if (this.OnCommandMove.ContainsKey(killInfo.Victim.SoldierName))
+            {
                 if (this.OnCommandMove[killInfo.Victim.SoldierName] == false)
                 {
                     //normal move
@@ -5281,8 +5443,8 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                         }
                     }
                 }
-                
-                else if(this.OnCommandMove[killInfo.Victim.SoldierName] == true)
+
+                else if (this.OnCommandMove[killInfo.Victim.SoldierName] == true)
                 {
                     //force move  
                     this.TSForceMove = DateTime.Now - this.DTForceMove;
@@ -5293,54 +5455,60 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     }
 
                 }
-                
+
 
             }
             else if (this.boolwaitfordeath)
             {
                 CPlayerInfo victim = killInfo.Victim;
-                if (dicPlayerCache[victim.SoldierName].teamID == intFromTeam) {
+                if (dicPlayerCache[victim.SoldierName].teamID == intFromTeam)
+                {
                     this.DebugInfo("Player ^b^0" + victim.SoldierName + "^n^9 died.");
                     if (dicPlayerCache[victim.SoldierName].playerWL == 0 && !dicPlayerCache[victim.SoldierName].IsCommander && !dicPlayerCache[victim.SoldierName].IsSpectator)
                     {
-                        if(this.boolwaitdead == false){
-                        this.DebugInfo("^4Player ^b" + victim.SoldierName + "^n needs to be balanced.");
-                        this.strdeadplayer = victim.SoldierName;
-                        //this.dicPlayerCache[victim.SoldierName].tobebalanced = true;
-                        //CompareTeams();
-                        this.ExecuteCommand("procon.protected.send", "admin.listPlayers", "all");
+                        if (this.boolwaitdead == false)
+                        {
+                            this.DebugInfo("^4Player ^b" + victim.SoldierName + "^n needs to be balanced.");
+                            this.strdeadplayer = victim.SoldierName;
+                            //this.dicPlayerCache[victim.SoldierName].tobebalanced = true;
+                            //CompareTeams();
+                            this.ExecuteCommand("procon.protected.send", "admin.listPlayers", "all");
                         }
-                    } else {
+                    }
+                    else
+                    {
                         this.DebugInfo("^1Player ^b" + victim.SoldierName + "^n is VIP, Commander, Spectator or has been allready moved once.");
                     }
-                }   
-            }
-        }
-        
-        
-        #endregion      
-      
-        #region TrueBalancer Functions
-        
-        public void DebugInfo(string DebugMessage){
-            if (ynbDebugMode == enumBoolYesNo.Yes)
-            {
-                this.ExecuteCommand("procon.protected.pluginconsole.write","^b^9TrueBalancer:^n " + DebugMessage);
+                }
             }
         }
 
-        public void CompareTeams() {
+
+        #endregion
+
+        #region TrueBalancer Functions
+
+        public void DebugInfo(string DebugMessage)
+        {
+            if (ynbDebugMode == enumBoolYesNo.Yes)
+            {
+                this.ExecuteCommand("procon.protected.pluginconsole.write", "^b^9TrueBalancer:^n " + DebugMessage);
+            }
+        }
+
+        public void CompareTeams()
+        {
             //int WaitforOPSec = 0;
 
             //this.TSWaitforOP = DateTime.Now - this.DTLevelStart;
             //WaitforOPSec = this.TSWaitforOP.Hours * 3600 + this.TSWaitforOP.Minutes * 60 + this.TSWaitforOP.Seconds;
             //if (WaitforOPSec >= 10)
             //{
-                //this.DebugInfo("WaitforOPSec: " + WaitforOPSec.ToString());
+            //this.DebugInfo("WaitforOPSec: " + WaitforOPSec.ToString());
 
             this.TeamA = 0;
             this.TeamB = 0;
-            
+
             this.rankA = 0;
             this.rankB = 0;
             this.skillA = 0;
@@ -5353,7 +5521,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             this.kdrB = 0;
             this.TBvalueA = 0;
             this.TBvalueB = 0;
-            
+
             foreach (KeyValuePair<string, CPlayerJoinInf> kvp in this.dicPlayerCache)
             {
                 if (!dicPlayerCache[kvp.Key].IsCommander && !dicPlayerCache[kvp.Key].IsSpectator)
@@ -5380,28 +5548,28 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     }
                 }
             }
-            
-            this.rankA = Math.Round(this.rankA/this.TeamA, 2);
-            this.rankB = Math.Round(this.rankB/this.TeamB, 2);
-            
-            this.skillA = Math.Round(this.skillA/this.TeamA, 2);
-            this.skillB = Math.Round(this.skillB/this.TeamB, 2);
-            
-            this.spmA = Math.Round(this.spmA/this.TeamA, 2);
-            this.spmB = Math.Round(this.spmB/this.TeamB, 2);
-            
-            this.spmcombatA = Math.Round(this.spmcombatA/this.TeamA, 2);
-            this.spmcombatB = Math.Round(this.spmcombatB/this.TeamB, 2);
-            
-            this.kdrA = Math.Round(this.kdrA/this.TeamA, 2);
-            this.kdrB = Math.Round(this.kdrB/this.TeamB, 2);
+
+            this.rankA = Math.Round(this.rankA / this.TeamA, 2);
+            this.rankB = Math.Round(this.rankB / this.TeamB, 2);
+
+            this.skillA = Math.Round(this.skillA / this.TeamA, 2);
+            this.skillB = Math.Round(this.skillB / this.TeamB, 2);
+
+            this.spmA = Math.Round(this.spmA / this.TeamA, 2);
+            this.spmB = Math.Round(this.spmB / this.TeamB, 2);
+
+            this.spmcombatA = Math.Round(this.spmcombatA / this.TeamA, 2);
+            this.spmcombatB = Math.Round(this.spmcombatB / this.TeamB, 2);
+
+            this.kdrA = Math.Round(this.kdrA / this.TeamA, 2);
+            this.kdrB = Math.Round(this.kdrB / this.TeamB, 2);
 
             this.TBvalueA = Math.Round(this.TBvalueA / this.TeamA, 1);
             this.TBvalueB = Math.Round(this.TBvalueB / this.TeamB, 1);
 
             this.DebugInfo("Team A: ^6Size: ^b" + this.TeamA + "^n,^7 TBValue: ^b" + this.TBvalueA.ToString("F1") + "^n,^0 Rank: ^b" + this.rankA.ToString("F2") + "^n,^1 Skill: ^b" + this.skillA.ToString("F2") + "^n,^2 SPM: ^b" + this.spmA.ToString("F2") + "^n,^3 SPMcombat: ^b" + this.spmcombatA.ToString("F2") + "^n,^4 KDR: ^b" + this.kdrA.ToString("F2"));
             this.DebugInfo("Team B: ^6Size: ^b" + this.TeamB + "^n,^7 TBValue: ^b" + this.TBvalueB.ToString("F1") + "^n,^0 Rank: ^b" + this.rankB.ToString("F2") + "^n,^1 Skill: ^b" + this.skillB.ToString("F2") + "^n,^2 SPM: ^b" + this.spmB.ToString("F2") + "^n,^3 SPMcombat: ^b" + this.spmcombatB.ToString("F2") + "^n,^4 KDR: ^b" + this.kdrB.ToString("F2"));
-            
+
             if (this.TeamA > this.TeamB)
             {
                 this.intToTeam = 2;
@@ -5420,7 +5588,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 this.intPlayerDif = 0;
             }
             this.DebugInfo("^4PlayerDiff: ^b" + this.intPlayerDif);
-            
+
             if (this.intPlayerDif < 2)
             {
                 this.DebugInfo("^2Teams are balanced.");
@@ -5429,8 +5597,8 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 this.booltimer = false;
                 this.intcountWarnings = 0;
                 this.boolbalanced = true;
-                
-                if(this.boolstartBalance == true)
+
+                if (this.boolstartBalance == true)
                 {
                     this.boolstartBalance = false;
                     this.boolafterBalance = true;
@@ -5441,12 +5609,13 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 this.boolwaitfordeath = false;
                 this.boolwaitdead = false;
             }
-            
-            
-            
-            
-            
-            if (!this.boolscrambleActive){
+
+
+
+
+
+            if (!this.boolscrambleActive)
+            {
 
                 if (this.intPlayerDif > this.intAllowDif)
                 {
@@ -5647,19 +5816,22 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 }
 
 
-            }else {
+            }
+            else
+            {
                 DebugInfoSkill("^3Scrambler Active Comparing teams!");
             }
-            
-        //}
-        //else
-        //{
-        //    this.DebugInfo("Waiting for new round! WaitforOPSec: " + WaitforOPSec.ToString());
-        //}
+
+            //}
+            //else
+            //{
+            //    this.DebugInfo("Waiting for new round! WaitforOPSec: " + WaitforOPSec.ToString());
+            //}
         }
 
-        public void BalancingTimer() {
-                   
+        public void BalancingTimer()
+        {
+
             this.DebugInfo("------Timer-----");
 
             if (this.intPlayerDif < 2)
@@ -5671,7 +5843,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 this.boolwaitfordeath = false;
                 this.strdeadplayer = "";
                 this.boolbalanced = true;
-            
+
                 if (this.boolstartBalance == true)
                 {
                     this.boolstartBalance = false;
@@ -5690,14 +5862,15 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     // Warnungen ausgeben. strWarning
                     string strTEMP = this.strWarning.Replace("%Warning%", Convert.ToString(this.intcountWarnings));
                     strTEMP = strTEMP.Replace("%maxWarnings%", Convert.ToString(this.intWarnings));
-                    if (ynbShowWarnings == enumBoolYesNo.Yes){
+                    if (ynbShowWarnings == enumBoolYesNo.Yes)
+                    {
                         if (this.boolVirtual)
                         {
                             this.ExecuteCommand("procon.protected.pluginconsole.write", "^b[TB] VIRTUAL:^n say all - " + strTEMP);
                         }
                         else
                         {
-                            this.ExecuteCommand("procon.protected.send", "admin.say", strTEMP , "all");
+                            this.ExecuteCommand("procon.protected.send", "admin.say", strTEMP, "all");
                         }
                     }
                     this.DebugInfo(strTEMP);
@@ -5709,7 +5882,8 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     this.boolwaitfordeath = true;
                     //AUSFÜHREN von SERVERINFO
                     //this.ExecuteCommand("procon.protected.send", "serverInfo");
-                    if(/*this.strdeadplayer != "" && this.boolwaitfordeath && */this.boolwaitdead == false){
+                    if (/*this.strdeadplayer != "" && this.boolwaitfordeath && */this.boolwaitdead == false)
+                    {
                         if (this.strcurrentGametype.Contains("Conquest") || this.strcurrentGametype.Contains("TankSuperiority0") || this.strcurrentGametype.Contains("Rush") || this.strcurrentGametype.Contains("GunMaster") || this.strcurrentGametype.Contains("Scavenger") || this.strcurrentGametype.Contains("AirSuperiority0") || this.strcurrentGametype.Contains("CaptureTheFlag0") || this.strcurrentGametype.Contains("Elimination") || this.strcurrentGametype.Contains("CarrierAssault") || this.strcurrentGametype.Contains("Chainlink"))
                         {
                             if (this.intScoreTeamA > this.intminScore && this.intScoreTeamB > this.intminScore)
@@ -5784,43 +5958,44 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                             this.DebugInfo("^8^b" + this.strcurrentGametype + " not supported!");
                         }
                     }
-                    
+
                     //Start Balance
                     // if ( this.intScoreTeamA > this.intminScore && this.intScoreTeamB > this.intminScore){
-                        // startBalancing();
+                    // startBalancing();
                     // } else {
-                        // this.DebugInfo("Not starting Balance. Tickets till Endround: TeamA: " + this.intScoreTeamA + ", TeamB: " + this.intScoreTeamB);
+                    // this.DebugInfo("Not starting Balance. Tickets till Endround: TeamA: " + this.intScoreTeamA + ", TeamB: " + this.intScoreTeamB);
                     // }
                 }
             }
 
             this.booltimer = false;
             // if (this.boolLevelStart)
-                // CompareTeams();
-            this.DebugInfo("Timer End");    
+            // CompareTeams();
+            this.DebugInfo("Timer End");
         }
-                
-        public void startBalancing() {
-        
+
+        public void startBalancing()
+        {
+
             this.DebugInfo("startBalancing");
             this.boolstartBalance = true;
             this.boolwaitdead = true;
-            
+
             //DateTime maxValue = new DateTime();
             this.strMovedPlayer = "";
-                        
-            
+
+
             Dictionary<string, CPlayerJoinInf> dicPlayerSorted = new Dictionary<string, CPlayerJoinInf>();
             Dictionary<string, CPlayerJoinInf> dicPlayerSortedTEMP = new Dictionary<string, CPlayerJoinInf>();
-            
+
             foreach (KeyValuePair<string, CPlayerJoinInf> kvp in this.dicPlayerCache)
             {
                 if (this.dicPlayerCache[kvp.Key].teamID == this.intFromTeam && this.dicPlayerCache[kvp.Key].playerWL == 0 && !dicPlayerCache[kvp.Key].IsCommander && !dicPlayerCache[kvp.Key].IsSpectator)
                 {
-                    dicPlayerSortedTEMP.Add(kvp.Key, kvp.Value);    
+                    dicPlayerSortedTEMP.Add(kvp.Key, kvp.Value);
                 }
             }
-            
+
             /*      
             foreach (KeyValuePair<string, CPlayerJoinInf> kvp1 in dicPlayerSortedTEMP)
             {
@@ -5839,37 +6014,42 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 dicPlayerSorted.Add(kvplastjoiner.Key, kvplastjoiner.Value);    
             }
             */
-            
+
             bool Sortiert = true;
-            do{
-                Sortiert = true; 
+            do
+            {
+                Sortiert = true;
                 DateTime maxValueJoined = new DateTime();
                 int minscore = 100000000;
                 KeyValuePair<string, CPlayerJoinInf> kvplastjoiner = new KeyValuePair<string, CPlayerJoinInf>();
-                
-                foreach (KeyValuePair<string, CPlayerJoinInf> kvp2 in dicPlayerSortedTEMP){
-                    
-                    if (dicPlayerSorted.ContainsKey(kvp2.Key) == false && dicPlayerSortedTEMP[kvp2.Key].score < minscore){
+
+                foreach (KeyValuePair<string, CPlayerJoinInf> kvp2 in dicPlayerSortedTEMP)
+                {
+
+                    if (dicPlayerSorted.ContainsKey(kvp2.Key) == false && dicPlayerSortedTEMP[kvp2.Key].score < minscore)
+                    {
                         minscore = dicPlayerSortedTEMP[kvp2.Key].score;
                         maxValueJoined = dicPlayerSortedTEMP[kvp2.Key].Playerjoined;
                         kvplastjoiner = kvp2;
                         Sortiert = false;
                     }
-                    else if (dicPlayerSorted.ContainsKey(kvp2.Key) == false && dicPlayerSortedTEMP[kvp2.Key].score == minscore && maxValueJoined < dicPlayerSortedTEMP[kvp2.Key].Playerjoined){
+                    else if (dicPlayerSorted.ContainsKey(kvp2.Key) == false && dicPlayerSortedTEMP[kvp2.Key].score == minscore && maxValueJoined < dicPlayerSortedTEMP[kvp2.Key].Playerjoined)
+                    {
                         maxValueJoined = dicPlayerSortedTEMP[kvp2.Key].Playerjoined;
                         kvplastjoiner = kvp2;
                         Sortiert = false;
                     }
                 }
-                if (Sortiert == false){
+                if (Sortiert == false)
+                {
                     dicPlayerSorted.Add(kvplastjoiner.Key, kvplastjoiner.Value);
                 }
                 if (Sortiert)
                     this.DebugInfo("sorted");
-                  
+
             } while (!Sortiert);
-            
-            
+
+
             string strsorted = "";
             string printSoldier = "";
             foreach (KeyValuePair<string, CPlayerJoinInf> kvp in dicPlayerSorted)
@@ -5877,40 +6057,45 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 printSoldier = kvp.Key.Replace("{", "(");
                 printSoldier = printSoldier.Replace("}", ")");
 
-                strsorted = strsorted + "^4" + Convert.ToString(dicPlayerSorted[kvp.Key].score) + 
-                "^9 / ^5" + dicPlayerSorted[kvp.Key].Playerjoined.ToString("HH:mm:ss")+ "^9 - ^0^b" + printSoldier + "^n^3 -=- ^9";
+                strsorted = strsorted + "^4" + Convert.ToString(dicPlayerSorted[kvp.Key].score) +
+                "^9 / ^5" + dicPlayerSorted[kvp.Key].Playerjoined.ToString("HH:mm:ss") + "^9 - ^0^b" + printSoldier + "^n^3 -=- ^9";
             }
-            
+
             this.DebugInfo(strsorted);
-            
-            
+
+
             List<string> ToBeMovedList = new List<string>(dicPlayerSorted.Keys);
             int itemCount = ToBeMovedList.Count;
-            
+
             int dblcutoff = 5;
-            if (this.intFromTeam == 1) {
-                if (this.TeamA/2 > 5)
-                    dblcutoff = this.TeamA/2;
-            }else if (this.intFromTeam == 2){
-                if (this.TeamB/2 > 5)
-                    dblcutoff = this.TeamB/2;
+            if (this.intFromTeam == 1)
+            {
+                if (this.TeamA / 2 > 5)
+                    dblcutoff = this.TeamA / 2;
+            }
+            else if (this.intFromTeam == 2)
+            {
+                if (this.TeamB / 2 > 5)
+                    dblcutoff = this.TeamB / 2;
             }
             this.DebugInfo("Cutoff: ^b" + dblcutoff.ToString());
-            for (int k=itemCount-1; k >= dblcutoff; k--){
-            //this.DebugInfo("removed");
-            ToBeMovedList.RemoveAt(k);
-            //itemCount = ToBeMovedList.Count;
+            for (int k = itemCount - 1; k >= dblcutoff; k--)
+            {
+                //this.DebugInfo("removed");
+                ToBeMovedList.RemoveAt(k);
+                //itemCount = ToBeMovedList.Count;
             }
-            
+
             string completelist = "";
             itemCount = ToBeMovedList.Count;
-            for (int k=0; k<itemCount; k++){
+            for (int k = 0; k < itemCount; k++)
+            {
                 completelist = completelist + "^0^b" + ToBeMovedList[k] + "^9^n: ^4" + this.dicPlayerCache[ToBeMovedList[k]].score + "^9 -=- ";
             }
             this.DebugInfo(completelist);
-            
+
             bool willbebalanced = false;
-            
+
             foreach (KeyValuePair<string, CPlayerJoinInf> kvp in this.dicPlayerCache)
             {
                 if (this.dicPlayerCache[kvp.Key].tobebalanced && this.dicPlayerCache[kvp.Key].teamID == this.intFromTeam)
@@ -5927,12 +6112,16 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 willbebalanced = true;
             }
 
-            if (!willbebalanced){
+            if (!willbebalanced)
+            {
                 this.DebugInfo("^3No Player dead and/or marked to be moved.");
                 this.strdeadplayer = "";
-            }else{
+            }
+            else
+            {
                 string strTEMP = this.strLastWarning.Replace("%MovedPlayer%", this.strMovedPlayer);
-                if (ynbShowBallancing == enumBoolYesNo.Yes){
+                if (ynbShowBallancing == enumBoolYesNo.Yes)
+                {
                     if (this.boolVirtual)
                     {
                         this.ExecuteCommand("procon.protected.pluginconsole.write", "^b[TB] VIRTUAL:^n say all - " + strTEMP);
@@ -5955,48 +6144,52 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 this.DebugInfo("playermoved");
                 this.ExecuteCommand("procon.protected.chat.write", "AUTOBALANCING [Player: " + this.strMovedPlayer + "]");
                 this.BalancedPlayers.Add(this.strMovedPlayer);
-                
+
                 this.dicPlayerCache[this.strMovedPlayer].teamID = intToTeam;
                 this.dicPlayerCache[this.strMovedPlayer].playerWL = 2;
                 this.dicPlayerCache[this.strMovedPlayer].tobebalanced = false;
                 dicPlayerCache[this.strMovedPlayer].Playerjoined = DateTime.Now;
                 string strTEMP2 = this.strBeenMoved.Replace("%MovedPlayer%", this.strMovedPlayer);
-                
-                if (ynbShowPlayermessage == enumBoolYesNo.Yes){
+
+                if (ynbShowPlayermessage == enumBoolYesNo.Yes)
+                {
                     if (this.boolVirtual)
                     {
                         this.ExecuteCommand("procon.protected.pluginconsole.write", "^b[TB] VIRTUAL^n admin.say player " + this.strMovedPlayer + " - " + strTEMP2);
                     }
                     else
                     {
-                        this.ExecuteCommand("procon.protected.send", "admin.say", strTEMP2 , "player", this.strMovedPlayer);
+                        this.ExecuteCommand("procon.protected.send", "admin.say", strTEMP2, "player", this.strMovedPlayer);
                     }
                 }
 
-                this.DebugInfo("^b^0" + this.strMovedPlayer + "^n:^4 " + dicPlayerCache[this.strMovedPlayer].score + "^9 - ^4" + dicPlayerCache[this.strMovedPlayer].Playerjoined.ToString("HH:mm:ss") + "^9 -=- ^4" + 
-                this.intFromTeam.ToString() + "." + dicPlayerCache[this.strMovedPlayer].playerSquad + " ---> "  + dicPlayerCache[this.strMovedPlayer].teamID.ToString());
+                this.DebugInfo("^b^0" + this.strMovedPlayer + "^n:^4 " + dicPlayerCache[this.strMovedPlayer].score + "^9 - ^4" + dicPlayerCache[this.strMovedPlayer].Playerjoined.ToString("HH:mm:ss") + "^9 -=- ^4" +
+                this.intFromTeam.ToString() + "." + dicPlayerCache[this.strMovedPlayer].playerSquad + " ---> " + dicPlayerCache[this.strMovedPlayer].teamID.ToString());
                 this.DebugInfo(strTEMP);
                 this.DebugInfo(strTEMP2);
-                this.strdeadplayer = "";    
+                this.strdeadplayer = "";
             }
-            
-        this.DebugInfo("startBalancing end");
-        this.boolwaitdead = false;
+
+            this.DebugInfo("startBalancing end");
+            this.boolwaitdead = false;
         }
         #endregion
-    
+
         #region SkillScrambler
 
-        public void DebugInfoSkill(string DebugMessage){
-            if (ynbDebugModeSkill == enumBoolYesNo.Yes){
+        public void DebugInfoSkill(string DebugMessage)
+        {
+            if (ynbDebugModeSkill == enumBoolYesNo.Yes)
+            {
                 this.ExecuteCommand("procon.protected.pluginconsole.write", "^b^9TrueBalancer:^n " + DebugMessage);
                 //TextWriter tw = new StreamWriter("TrueBalancer.txt",true);
                 //tw.WriteLine(DateTime.Now.ToString() + ": " + DebugMessage);
                 //tw.Close();
             }
         }
-        
-        public void StartScrambler() {
+
+        public void StartScrambler()
+        {
             //this.ExecuteCommand("procon.protected.send", "admin.listPlayers", "all");
             // NEU - Die Squadsortierung und das scramblen hier nach unten verschieben, um sicherzustellen, dass auch nur die gescrambled werden, die auch auf dem Server sind.
             DebugInfoSkill("^4Starting Scrambler now!");
@@ -6009,7 +6202,8 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 CompareSlots = intMaxSlots;
 
 
-            if (this.dicPlayerCache.Count < CompareSlots){
+            if (this.dicPlayerCache.Count < CompareSlots)
+            {
 
                 this.dicSquadScore.Clear();
                 this.DTScramblestarted = DateTime.Now;
@@ -6042,10 +6236,11 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     KeepNoSquads();
                 }
 
-                
-                
+
+
                 //move them all out of squads
-                foreach (KeyValuePair<string, CPlayerJoinInf> kvp in this.dicPlayerCache){
+                foreach (KeyValuePair<string, CPlayerJoinInf> kvp in this.dicPlayerCache)
+                {
                     if (this.boolVirtual)
                     {
                         this.ExecuteCommand("procon.protected.pluginconsole.write", "^b[TB] VIRTUAL^n admin.movePlayer " + kvp.Key + " " + this.dicPlayerCache[kvp.Key].teamID.ToString() + " 0 true");
@@ -6056,70 +6251,85 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     }
                 }
                 ScrambleNow();
-                
-                
+
+
                 //this.ExecuteCommand("procon.protected.tasks.add", "WaitScrambleTimer", "1", "1", "1",  "procon.protected.plugins.call", "TrueBalancer", "ScrambleNow");
-            }else{
+            }
+            else
+            {
                 this.DebugInfoSkill("^3^bWas not able to scramble, because the server is full.");
             }
-        
+
         }
-        
-        public void ScrambleNow() {
-            
+
+        public void ScrambleNow()
+        {
+
             this.boolscrambleNow = true;
-            this.intScrambleCount ++;
-            bool boolScrambledall = true;           
+            this.intScrambleCount++;
+            bool boolScrambledall = true;
             this.DebugInfoSkill("^4Scrambling now!");
-            
-            TimeSpan ScrambleTime  = new TimeSpan(0);
+
+            TimeSpan ScrambleTime = new TimeSpan(0);
             ScrambleTime = DateTime.Now - this.DTScramblestarted;
-            if (ScrambleTime.TotalSeconds > 20 || this.boolTeamsScrambled){
+            if (ScrambleTime.TotalSeconds > 20 || this.boolTeamsScrambled)
+            {
                 this.DebugInfoSkill("^3^bWas not able to scramble teams in 15 seconds! Teams partly scrambled. TeamsScrambled? " + this.boolTeamsScrambled.ToString());
-                if (this.boolLevelStart){
-                    if (this.ynbScrambleMessage == enumBoolYesNo.Yes){
-                        if (this.strScrambleDoneMsg !=""){
+                if (this.boolLevelStart)
+                {
+                    if (this.ynbScrambleMessage == enumBoolYesNo.Yes)
+                    {
+                        if (this.strScrambleDoneMsg != "")
+                        {
                             if (this.boolVirtual)
                             {
                                 this.ExecuteCommand("procon.protected.pluginconsole.write", "^b[TB] VIRTUAL:^n say all - " + strScrambleDoneMsg);
                             }
                             else
                             {
-                                this.ExecuteCommand("procon.protected.send", "admin.say", strScrambleDoneMsg , "all");
+                                this.ExecuteCommand("procon.protected.send", "admin.say", strScrambleDoneMsg, "all");
                             }
-                                if (this.ynbYellScrambleManuall == enumBoolYesNo.Yes && !this.boolVirtual){
-                                    this.ExecuteCommand("procon.protected.send", "admin.yell", strScrambleDoneMsg , "30");
-                                }
+                            if (this.ynbYellScrambleManuall == enumBoolYesNo.Yes && !this.boolVirtual)
+                            {
+                                this.ExecuteCommand("procon.protected.send", "admin.yell", strScrambleDoneMsg, "30");
+                            }
                         }
                     }
                 }
-                
+
                 this.boolTeamsScrambled = true;
                 this.intScrambledPlayers = 0;
                 this.boolscrambleNow = false;
                 this.boolscrambleActive = false;
                 this.intScrambleCount = 0;
-            }   
-            
-            if (this.boolscrambleActive){
-            
-                if (this.boolfirstscrambler || this.boolscramblefailed){
+            }
+
+            if (this.boolscrambleActive)
+            {
+
+                if (this.boolfirstscrambler || this.boolscramblefailed)
+                {
                     this.boolfirstscrambler = false;
                     this.boolscramblefailed = false;
-                    
-                    if (this.strErrorMsg == "SetSquadFailed"){
+
+                    if (this.strErrorMsg == "SetSquadFailed")
+                    {
                         string strfailedSquad = "";
                         int SSFTeamID = 0;
                         int intnewSquad = 0;
-                        
-                        foreach (KeyValuePair<int, CPlayerScoreInf> kvp in this.dicPlayerScore){
+
+                        foreach (KeyValuePair<int, CPlayerScoreInf> kvp in this.dicPlayerScore)
+                        {
                             if (this.m_isPluginEnabled == false) break;
-                            if (this.dicPlayerCache.ContainsKey(this.dicPlayerScore[kvp.Key].playerName) && !this.dicPlayerScore[kvp.Key].scrambled){
+                            if (this.dicPlayerCache.ContainsKey(this.dicPlayerScore[kvp.Key].playerName) && !this.dicPlayerScore[kvp.Key].scrambled)
+                            {
                                 this.strFinalSquad = this.dicPlayerScore[kvp.Key].teamID + "." + this.dicPlayerScore[kvp.Key].playerSquad;
-                                if (!this.dicSquadList.ContainsKey(this.strFinalSquad)){
+                                if (!this.dicSquadList.ContainsKey(this.strFinalSquad))
+                                {
                                     this.dicSquadList.Add(this.strFinalSquad, this.dicPlayerScore[kvp.Key].playerSquad);
                                 }
-                                if (strfailedSquad == ""){
+                                if (strfailedSquad == "")
+                                {
                                     SSFTeamID = this.dicPlayerScore[kvp.Key].teamID;
                                     strfailedSquad = this.strFinalSquad;
                                     /*for (int j = 1; j < 17; j++) {
@@ -6164,8 +6374,8 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                                 }*/
                             }
                         }
-                        
-                        for (int j = 1; j <= 20; j++) 
+
+                        for (int j = 1; j <= 20; j++)
                         {
                             if (!this.dicSquadList.ContainsKey(SSFTeamID + "." + j))
                             {
@@ -6199,7 +6409,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                                     {
                                         this.ExecuteCommand("procon.protected.send", "admin.movePlayer", this.dicPlayerScore[kvp.Key].playerName, this.dicPlayerScore[kvp.Key].teamID.ToString(), this.dicPlayerScore[kvp.Key].playerSquad.ToString(), "true");
                                     }
-                                    
+
                                 }
                                 else
                                 {
@@ -6220,15 +6430,20 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                         }
 
 
-                                                                
-                    }else {
-                        foreach (KeyValuePair<int, CPlayerScoreInf> kvp in this.dicPlayerScore){
+
+                    }
+                    else
+                    {
+                        foreach (KeyValuePair<int, CPlayerScoreInf> kvp in this.dicPlayerScore)
+                        {
                             if (this.m_isPluginEnabled == false) break;
-                            if (this.dicPlayerCache.ContainsKey(this.dicPlayerScore[kvp.Key].playerName) && !this.dicPlayerScore[kvp.Key].scrambled){
+                            if (this.dicPlayerCache.ContainsKey(this.dicPlayerScore[kvp.Key].playerName) && !this.dicPlayerScore[kvp.Key].scrambled)
+                            {
                                 this.strFinalSquad = this.dicPlayerScore[kvp.Key].teamID + "." + this.dicPlayerScore[kvp.Key].playerSquad;
-                                if (!this.dicSquadList.ContainsKey(this.strFinalSquad)){
+                                if (!this.dicSquadList.ContainsKey(this.strFinalSquad))
+                                {
                                     this.dicSquadList.Add(this.strFinalSquad, this.dicPlayerScore[kvp.Key].playerSquad);
-                                }       
+                                }
                                 //this.DebugInfoSkill("^4" + this.strFinalSquad + ":" +  "Scramble Player: " + this.dicPlayerScore[kvp.Key].playerName);
                                 boolScrambledall = false;
                                 if (this.boolVirtual)
@@ -6239,22 +6454,27 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                                 {
                                     this.ExecuteCommand("procon.protected.send", "admin.movePlayer", this.dicPlayerScore[kvp.Key].playerName, this.dicPlayerScore[kvp.Key].teamID.ToString(), this.dicPlayerScore[kvp.Key].playerSquad.ToString(), "true");
                                 }
-                                
-                            }   
+
+                            }
                         }
                     }
-                    
-                    this.strErrorMsg = "";  
-                }else{
+
+                    this.strErrorMsg = "";
+                }
+                else
+                {
                     this.DebugInfoSkill("^1Waiting for players to be moved");
                     boolScrambledall = false;
                 }
             }
-            
-            if (!boolScrambledall){
+
+            if (!boolScrambledall)
+            {
                 this.boolRunOnList = true;
                 this.ExecuteCommand("procon.protected.send", "admin.listPlayers", "all");
-            }else{
+            }
+            else
+            {
                 this.boolRunOnList = false;
                 this.DebugInfoSkill("^4^bTeams are scrambled now! boolScrambledall");
                 this.boolscrambleNow = false;
@@ -6262,108 +6482,128 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 this.intScrambleCount = 0;
                 this.boolTeamsScrambled = true;
                 this.intScrambledPlayers = 0;
-                if (this.boolLevelStart){
-                    if (this.ynbScrambleMessage == enumBoolYesNo.Yes){
-                        if (this.strScrambleDoneMsg !=""){
+                if (this.boolLevelStart)
+                {
+                    if (this.ynbScrambleMessage == enumBoolYesNo.Yes)
+                    {
+                        if (this.strScrambleDoneMsg != "")
+                        {
                             if (this.boolVirtual)
                             {
                                 this.ExecuteCommand("procon.protected.pluginconsole.write", "^b[TB] VIRTUAL:^n say all - " + strScrambleDoneMsg);
                             }
                             else
                             {
-                                this.ExecuteCommand("procon.protected.send", "admin.say", strScrambleDoneMsg , "all");
+                                this.ExecuteCommand("procon.protected.send", "admin.say", strScrambleDoneMsg, "all");
                             }
-                            if (this.ynbYellScrambleManuall == enumBoolYesNo.Yes && !this.boolVirtual){
-                                this.ExecuteCommand("procon.protected.send", "admin.yell", strScrambleDoneMsg , "30");
+                            if (this.ynbYellScrambleManuall == enumBoolYesNo.Yes && !this.boolVirtual)
+                            {
+                                this.ExecuteCommand("procon.protected.send", "admin.yell", strScrambleDoneMsg, "30");
                             }
                         }
                     }
                 }
             }
         }
-        
-        public void OnCommandScrambleNow(string strSpeaker, string strText, MatchCommand mtcCommand, CapturedCommand capCommand, CPlayerSubset subMatchedScope){
+
+        public void OnCommandScrambleNow(string strSpeaker, string strText, MatchCommand mtcCommand, CapturedCommand capCommand, CPlayerSubset subMatchedScope)
+        {
             bool blIsAdmin = false;
             CPrivileges cpAccount = this.GetAccountPrivileges(strSpeaker);
             if (cpAccount != null && cpAccount.PrivilegesFlags > 0) { blIsAdmin = true; }
-            
-            if(blIsAdmin){
-                this.DebugInfoSkill("^1Admin requested a scramble now!");
-                
-                this.TSLevelStartWait = DateTime.Now - this.DTLevelStart;
-                if (this.boolLevelStart && this.boolFirstOP){
 
-                    if (this.ynbEnableScrambleNow == enumBoolYesNo.Yes){
-                        if (!this.boolscrambleActive){
-                    
-                            if (this.ynbScrambleMessage == enumBoolYesNo.Yes){
-                                    if (this.strScrambleNowMsg != ""){
-                                        if (this.boolVirtual)
-                                        {
-                                            this.ExecuteCommand("procon.protected.pluginconsole.write", "^b[TB] VIRTUAL:^n say all - " + this.strScrambleNowMsg);
-                                        }
-                                        else
-                                        {
-                                            this.ExecuteCommand("procon.protected.send", "admin.say", this.strScrambleNowMsg , "all");
-                                        }
-                                        if (this.ynbYellScrambleManuall == enumBoolYesNo.Yes && !this.boolVirtual){
-                                            this.ExecuteCommand("procon.protected.send", "admin.yell", this.strScrambleNowMsg , "30");
-                                        }
+            if (blIsAdmin)
+            {
+                this.DebugInfoSkill("^1Admin requested a scramble now!");
+
+                this.TSLevelStartWait = DateTime.Now - this.DTLevelStart;
+                if (this.boolLevelStart && this.boolFirstOP)
+                {
+
+                    if (this.ynbEnableScrambleNow == enumBoolYesNo.Yes)
+                    {
+                        if (!this.boolscrambleActive)
+                        {
+
+                            if (this.ynbScrambleMessage == enumBoolYesNo.Yes)
+                            {
+                                if (this.strScrambleNowMsg != "")
+                                {
+                                    if (this.boolVirtual)
+                                    {
+                                        this.ExecuteCommand("procon.protected.pluginconsole.write", "^b[TB] VIRTUAL:^n say all - " + this.strScrambleNowMsg);
+                                    }
+                                    else
+                                    {
+                                        this.ExecuteCommand("procon.protected.send", "admin.say", this.strScrambleNowMsg, "all");
+                                    }
+                                    if (this.ynbYellScrambleManuall == enumBoolYesNo.Yes && !this.boolVirtual)
+                                    {
+                                        this.ExecuteCommand("procon.protected.send", "admin.yell", this.strScrambleNowMsg, "30");
                                     }
                                 }
-                                
+                            }
+
                             int i = 1;
                             this.dicPlayerScore.Clear();
                             this.dicSquadScore.Clear();
                             this.bestSquadTeamID = 0;
-                            
-                            
-                            foreach (KeyValuePair<string, CPlayerJoinInf> kvp in this.dicPlayerCache) {
+
+
+                            foreach (KeyValuePair<string, CPlayerJoinInf> kvp in this.dicPlayerCache)
+                            {
                                 double value = this.dicPlayerCache[kvp.Key].playerValue;
                                 string tag = this.dicPlayerCache[kvp.Key].tag;
                                 CPlayerScoreInf newEntry = new CPlayerScoreInf(kvp.Key, this.dicPlayerCache[kvp.Key].teamID, this.dicPlayerCache[kvp.Key].playerSquad, value, false, false, tag);
                                 this.dicPlayerScore.Add(i, newEntry);
                                 i++;
-                            
+
                             }
-                            
-                            
+
+
                             bool Sortiert;
-                            do{
-                                Sortiert = true; 
-                                for (int j = 1; j < this.dicPlayerScore.Count; j++) {
-                                    if (this.dicPlayerScore[j].playerValue < this.dicPlayerScore[j+1].playerValue){
+                            do
+                            {
+                                Sortiert = true;
+                                for (int j = 1; j < this.dicPlayerScore.Count; j++)
+                                {
+                                    if (this.dicPlayerScore[j].playerValue < this.dicPlayerScore[j + 1].playerValue)
+                                    {
                                         CPlayerScoreInf temp = new CPlayerScoreInf(this.dicPlayerScore[j].playerName, this.dicPlayerScore[j].teamID, this.dicPlayerScore[j].playerSquad, this.dicPlayerScore[j].playerValue, false, false, this.dicPlayerScore[j].tag);
-                                        this.dicPlayerScore[j] = this.dicPlayerScore[j+1];
-                                        this.dicPlayerScore[j+1] = temp;
+                                        this.dicPlayerScore[j] = this.dicPlayerScore[j + 1];
+                                        this.dicPlayerScore[j + 1] = temp;
                                         Sortiert = false;
                                     }
-                                }  
+                                }
                             } while (!Sortiert);
-                            
+
                             this.boolFirstOP = false;
                             this.boolwaitfordeath = false;
                             this.boolscrambleActive = true;
                             this.boolTeamsScrambled = false;
                             this.intScrambledPlayers = 0;
                             this.teamswitcher.Clear();
-                            
-                            
-                            this.ExecuteCommand("procon.protected.tasks.add", "WaitScrambleTimer", "3", "1", "1",  "procon.protected.plugins.call", "TrueBalancer", "StartScrambler");
+
+
+                            this.ExecuteCommand("procon.protected.tasks.add", "WaitScrambleTimer", "3", "1", "1", "procon.protected.plugins.call", "TrueBalancer", "StartScrambler");
                             //StartScrambler();
-                            
-                        }else{
+
+                        }
+                        else
+                        {
                             this.DebugInfoSkill("^3A scrambing has allready been requested.");
                             if (this.boolVirtual)
                             {
                                 this.ExecuteCommand("procon.protected.pluginconsole.write", "^b[TB] VIRTUAL^n admin.say player " + strSpeaker + " - " + "A scrambing has allready been requested.");
                             }
                             {
-                                this.ExecuteCommand("procon.protected.send", "admin.say", "A scrambing has allready been requested." , "player", strSpeaker);
+                                this.ExecuteCommand("procon.protected.send", "admin.say", "A scrambing has allready been requested.", "player", strSpeaker);
                             }
                         }
-                        
-                    }else{
+
+                    }
+                    else
+                    {
                         this.DebugInfoSkill("^3This command is deactivated at the moment. Activate in in PRoCon.");
                         if (this.boolVirtual)
                         {
@@ -6371,41 +6611,50 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                         }
                         else
                         {
-                            this.ExecuteCommand("procon.protected.send", "admin.say", "This command is not activated for your server in PRoCon." , "player", strSpeaker);
+                            this.ExecuteCommand("procon.protected.send", "admin.say", "This command is not activated for your server in PRoCon.", "player", strSpeaker);
                         }
                     }
-                    
+
                 }
-            }           
+            }
         }
-        
-        public void OnCommandScrambleRound(string strSpeaker, string strText, MatchCommand mtcCommand, CapturedCommand capCommand, CPlayerSubset subMatchedScope){
+
+        public void OnCommandScrambleRound(string strSpeaker, string strText, MatchCommand mtcCommand, CapturedCommand capCommand, CPlayerSubset subMatchedScope)
+        {
             bool blIsAdmin = false;
             CPrivileges cpAccount = this.GetAccountPrivileges(strSpeaker);
             if (cpAccount != null && cpAccount.PrivilegesFlags > 0) { blIsAdmin = true; }
-            if(blIsAdmin){
+            if (blIsAdmin)
+            {
                 this.DebugInfoSkill("^1Admin requested a scramble next round!");
-                
-                if (this.ynbEnableScrambleRound == enumBoolYesNo.Yes){
+
+                if (this.ynbEnableScrambleRound == enumBoolYesNo.Yes)
+                {
                     this.boolscramblebyadminroundend = true;
-                    if (this.boolLevelStart){
-                        if (this.ynbScrambleMessage == enumBoolYesNo.Yes){
-                            if (this.strScrambleRoundMsg != ""){
+                    if (this.boolLevelStart)
+                    {
+                        if (this.ynbScrambleMessage == enumBoolYesNo.Yes)
+                        {
+                            if (this.strScrambleRoundMsg != "")
+                            {
                                 if (this.boolVirtual)
                                 {
                                     this.ExecuteCommand("procon.protected.pluginconsole.write", "^b[TB] VIRTUAL:^n say all - " + this.strScrambleRoundMsg);
                                 }
                                 else
                                 {
-                                    this.ExecuteCommand("procon.protected.send", "admin.say", this.strScrambleRoundMsg , "all");
+                                    this.ExecuteCommand("procon.protected.send", "admin.say", this.strScrambleRoundMsg, "all");
                                 }
-                                if (this.ynbYellScrambleManuall == enumBoolYesNo.Yes && !this.boolVirtual){
-                                    this.ExecuteCommand("procon.protected.send", "admin.yell", this.strScrambleRoundMsg , "30");
+                                if (this.ynbYellScrambleManuall == enumBoolYesNo.Yes && !this.boolVirtual)
+                                {
+                                    this.ExecuteCommand("procon.protected.send", "admin.yell", this.strScrambleRoundMsg, "30");
                                 }
                             }
                         }
                     }
-                }else{
+                }
+                else
+                {
                     this.DebugInfoSkill("^3This command is deactivated at the moment. Activate it in PRoCon.");
                     if (this.boolVirtual)
                     {
@@ -6413,10 +6662,10 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     }
                     else
                     {
-                        this.ExecuteCommand("procon.protected.send", "admin.say", "This command is not activated for your server in PRoCon." , "player", strSpeaker);
+                        this.ExecuteCommand("procon.protected.send", "admin.say", "This command is not activated for your server in PRoCon.", "player", strSpeaker);
                     }
                 }
-            }           
+            }
         }
 
         public void OnScrambleViaPRoCon()
@@ -6455,7 +6704,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     this.DebugInfoSkill("^3You can only request for a scramble, if a round is running.");
                 }
             }
-            else 
+            else
             {
                 this.DebugInfoSkill("You need to activate and setup !scrambleround at '2.5 Skill-Scrambler: Manual Commands'");
             }
@@ -6516,7 +6765,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
             foreach (KeyValuePair<int, CPlayerScoreInf> kvp in this.dicPlayerScore)
             {
-                
+
                 if (this.dicPlayerScore[kvp.Key].playerSquad != 0)
                 {
                     squadexists = false;
@@ -6546,7 +6795,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             {
                 this.dicSquadScore[kvpsquad.Key].squadScore = this.dicSquadScore[kvpsquad.Key].squadScore / this.dicSquadScore[kvpsquad.Key].squadsize;
             }
-            
+
             bool Sortiert = true;
 
             do
@@ -6561,7 +6810,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                         this.dicSquadScore[j + 1] = tempsquad;
                         Sortiert = false;
                     }
-                    else if (this.dicSquadScore[j].squadsize == this.dicSquadScore[j + 1].squadsize && this.dicSquadScore[j].squadScore < this.dicSquadScore[j + 1].squadScore) 
+                    else if (this.dicSquadScore[j].squadsize == this.dicSquadScore[j + 1].squadsize && this.dicSquadScore[j].squadScore < this.dicSquadScore[j + 1].squadScore)
                     {
                         CSquadScoreInf tempsquad = new CSquadScoreInf(this.dicSquadScore[j].teamID, this.dicSquadScore[j].squadID, this.dicSquadScore[j].squadsize, this.dicSquadScore[j].squadScore, false);
                         this.dicSquadScore[j] = this.dicSquadScore[j + 1];
@@ -6832,7 +7081,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
             this.DebugInfoSkill("Keeping ALL Squads");
             // KEEP ALL SQUADS END
- 
+
         }
 
         public void KeepClanMates()
@@ -6892,21 +7141,21 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
 
             DebugScoreList = "Before Scramble:\nTeam 1: " + strTeam1 + "\n\nTeam 2: " + strTeam2;
-            this.DebugInfoSkill(DebugScoreList);     
+            this.DebugInfoSkill(DebugScoreList);
 
 
 
             bool SWITCHsquad = false;
             bool SWITCHplayer = false;
 
-            foreach(KeyValuePair<int, CPlayerScoreInf> kvpCheck in this.dicPlayerScore)
+            foreach (KeyValuePair<int, CPlayerScoreInf> kvpCheck in this.dicPlayerScore)
             {
                 squadTags.Clear();
 
                 if (this.dicPlayerScore[kvpCheck.Key].playerSquad == 0)
                 {
                     squadless++;
-                    
+
                     if (!SWITCHplayer)
                     {
                         SWITCHplayer = true;
@@ -6926,7 +7175,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     squadplayers = new List<int>();
                     squadplayers.Add(kvpCheck.Key);
                     string CheckSquad = this.dicPlayerScore[kvpCheck.Key].teamID + "." + this.dicPlayerScore[kvpCheck.Key].playerSquad;
-                       
+
                     if (this.dicPlayerScore[kvpCheck.Key].tag != "")
                     {
                         squadTags.Add(this.dicPlayerScore[kvpCheck.Key].tag);
@@ -6942,14 +7191,14 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                                 squadvalue = squadvalue + this.dicPlayerScore[kvp2.Key].playerValue;
                                 squadsize++;
                                 squadplayers.Add(kvp2.Key);
-                                if ((  ( ((IList<string>)this.strAClantagWhitelistScrambler).Contains(this.dicPlayerScore[kvp2.Key].tag) && this.dicPlayerScore[kvp2.Key].tag != "" ) || ( ((IList<string>)this.strAClantagWhitelistScrambler).Contains(this.dicPlayerScore[kvpCheck.Key].tag) && this.dicPlayerScore[kvpCheck.Key].tag != "" ) ) && !KeepSquads.Contains(CheckSquad))
+                                if (((((IList<string>)this.strAClantagWhitelistScrambler).Contains(this.dicPlayerScore[kvp2.Key].tag) && this.dicPlayerScore[kvp2.Key].tag != "") || (((IList<string>)this.strAClantagWhitelistScrambler).Contains(this.dicPlayerScore[kvpCheck.Key].tag) && this.dicPlayerScore[kvpCheck.Key].tag != "")) && !KeepSquads.Contains(CheckSquad))
                                 {
                                     KeepSquads.Add(this.dicPlayerScore[kvpCheck.Key].teamID + "." + this.dicPlayerScore[kvpCheck.Key].playerSquad);
                                     deletesquad = false;
                                     CSquadScoreInf newEntrySquad = new CSquadScoreInf(this.dicPlayerScore[kvpCheck.Key].teamID, this.dicPlayerScore[kvpCheck.Key].playerSquad, 0, 0, false);
                                     squadIDnew++;
                                     this.dicSquadScore.Add(squadIDnew, newEntrySquad);
-                                    DebugInfoSkill(string.Format("WL-Clantag detected, Clantag: ^b^2{0}^n^9 or Clantag: ^b^2{1}^n^9. Best Player: ^2{2}", this.dicPlayerScore[kvp2.Key].tag, this.dicPlayerScore[kvpCheck.Key].tag, this.dicPlayerScore[kvp2.Key].playerName)); 
+                                    DebugInfoSkill(string.Format("WL-Clantag detected, Clantag: ^b^2{0}^n^9 or Clantag: ^b^2{1}^n^9. Best Player: ^2{2}", this.dicPlayerScore[kvp2.Key].tag, this.dicPlayerScore[kvpCheck.Key].tag, this.dicPlayerScore[kvp2.Key].playerName));
                                     //BLEIBT BESTEHEN!
                                 }
                                 else if (squadTags.Contains(this.dicPlayerScore[kvp2.Key].tag) && this.dicPlayerScore[kvp2.Key].tag != "" && !KeepSquads.Contains(CheckSquad))
@@ -6965,7 +7214,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                                 }
                                 else if (!KeepSquads.Contains(CheckSquad) && this.dicPlayerScore[kvp2.Key].tag != "")
                                 {
-                                    squadTags.Add(this.dicPlayerScore[kvp2.Key].tag);     
+                                    squadTags.Add(this.dicPlayerScore[kvp2.Key].tag);
                                 }
                             }
                         }
@@ -6992,7 +7241,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                         {
                             this.dicSquadScore[squadIDnew].squadScore = squadvalue;
                             this.dicSquadScore[squadIDnew].squadsize = squadsize;
-                            
+
                             if (!SWITCHsquad)
                             {
                                 SWITCHsquad = true;
@@ -7005,10 +7254,10 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                                 PlayerTeamB.AddRange(squadplayers);
                                 SquadsTeamB.Add(squadIDnew);
                             }
-                            
+
                         }
                     }
-                    
+
 
                 }
 
@@ -7024,7 +7273,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 {
                     if (this.dicPlayerScore[PlayerTeamA[j]].playerSquad == 0 && (PlayerTeamA.Count - PlayerTeamB.Count) >= 2)
                     {
-                        DebugInfoSkill("Player moved to even Teams, 1->2: " + "[" + this.dicPlayerScore[PlayerTeamA[j]].tag +"]^b" + this.dicPlayerScore[PlayerTeamA[j]].playerName);
+                        DebugInfoSkill("Player moved to even Teams, 1->2: " + "[" + this.dicPlayerScore[PlayerTeamA[j]].tag + "]^b" + this.dicPlayerScore[PlayerTeamA[j]].playerName);
                         PlayerTeamB.Add(PlayerTeamA[j]);
                         PlayerTeamA.RemoveAt(j);
                     }
@@ -7178,9 +7427,9 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             do
             {
                 Sortiert = true;
-                for (int j = 0; j < (PlayerTeamA.Count -1); j++)
+                for (int j = 0; j < (PlayerTeamA.Count - 1); j++)
                 {
-                    if (this.dicPlayerScore[PlayerTeamA[j]].playerValue < this.dicPlayerScore[PlayerTeamA[j+1]].playerValue)
+                    if (this.dicPlayerScore[PlayerTeamA[j]].playerValue < this.dicPlayerScore[PlayerTeamA[j + 1]].playerValue)
                     {
                         int temp = PlayerTeamA[j];
                         PlayerTeamA[j] = PlayerTeamA[j + 1];
@@ -7418,7 +7667,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 }
 
             }
-            
+
             string DebugSortedList = "";
             strTeam1 = "";
             strTeam2 = "";
@@ -7446,9 +7695,9 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             this.intSquadB = 0;
 
             this.DebugInfoSkill("Keeping only CLAN-Squads");
-            
+
             // KEEP CLAN SQUADS END
- 
+
 
         }
 
@@ -7506,7 +7755,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             }
 
             DebugScoreList = "Before Scramble:\nTeam 1: " + strTeam1 + "\n\nTeam 2: " + strTeam2;
-            this.DebugInfoSkill(DebugScoreList);  
+            this.DebugInfoSkill(DebugScoreList);
 
 
 
@@ -7529,7 +7778,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     this.dicPlayerScore[kvpCheck.Key].playerSquad = 0;
                     PlayerTeamB.Add(kvpCheck.Key);
                 }
-                
+
             }
 
             int teamsizedifference = PlayerTeamA.Count - PlayerTeamB.Count;
@@ -7698,7 +7947,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                         count1 = 1;
                 }
             }
-     
+
 
             int squadscrambledA = 0;
             int squadscrambledB = 0;
@@ -7815,7 +8064,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             // KEEP NO SQUADS END
         }
 
-        public double TBValue(double TBrank, double TBskill, double TBspm, double TBspmcombat, double TBkdr) 
+        public double TBValue(double TBrank, double TBskill, double TBspm, double TBspmcombat, double TBkdr)
         {
             double _TBValue = TBrank * 5 + TBskill * 4 + TBspm + TBspmcombat * 8 + TBkdr * 500;
 
@@ -7824,11 +8073,13 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
 
         #endregion
-        
+
         #region Guard
 
-        public void DebugInfoGuard(string DebugMessage){
-            if (ynbDebugModeGuard == enumBoolYesNo.Yes){
+        public void DebugInfoGuard(string DebugMessage)
+        {
+            if (ynbDebugModeGuard == enumBoolYesNo.Yes)
+            {
                 this.ExecuteCommand("procon.protected.pluginconsole.write", "^b^9TrueBalancer:^n " + DebugMessage);
             }
         }
@@ -7847,7 +8098,8 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
         public void OnCommandTBForceMove(string strSpeaker, string strText, MatchCommand mtcCommand, CapturedCommand capCommand, CPlayerSubset subMatchedScope)
         {
-            if (capCommand.MatchedArguments.Count == 0) {
+            if (capCommand.MatchedArguments.Count == 0)
+            {
                 this.DebugInfoGuard("^4Malformed tb-fmove command: " + strText);
                 if (this.boolVirtual)
                 {
@@ -7869,7 +8121,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             {
                 this.OnCommandMove.Add(player, true);
             }
-            else 
+            else
             {
                 this.OnCommandMove[player] = true;
             }
@@ -7895,7 +8147,8 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
         public void OnCommandTBMove(string strSpeaker, string strText, MatchCommand mtcCommand, CapturedCommand capCommand, CPlayerSubset subMatchedScope)
         {
-            if (capCommand.MatchedArguments.Count == 0) {
+            if (capCommand.MatchedArguments.Count == 0)
+            {
                 this.DebugInfoGuard("^4Malformed tb-move command: " + strText);
                 if (this.boolVirtual)
                 {
@@ -7931,10 +8184,10 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 this.OnCommandMove[player] = false;
             }
         }
-        
-        
+
+
         #endregion
-        
+
         #region Battlelog
 
         public class BattlelogClient
@@ -7959,13 +8212,13 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             {
                 try
                 {
-                
+
                     // Create a request for the URL.        
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                     // Set Timeout
                     //plugin.DebugInfoSkill("Default timeout: " + request.Timeout);
-                    request.Timeout = 12*1000; // 12 seconds
-                    request.ReadWriteTimeout = 2*1000; // 2 seconds
+                    request.Timeout = 12 * 1000; // 12 seconds
+                    request.ReadWriteTimeout = 2 * 1000; // 2 seconds
                     request.KeepAlive = false;
                     /*
                     String h = "Headers: ";
@@ -7989,15 +8242,15 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     reader.Close();
                     dataStream.Close();
                     response.Close();
-                
 
-                /*
-                    if (client == null)
-                        client = new WebClient();
 
-                    html_data = client.DownloadString(url);
-                    //return html_data;
-                */
+                    /*
+                        if (client == null)
+                            client = new WebClient();
+
+                        html_data = client.DownloadString(url);
+                        //return html_data;
+                    */
 
                 }
                 catch (WebException e)
@@ -8011,7 +8264,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             }
 
             public enum ServerType { BF3, BF4 };
-            
+
             public class StatsException : Exception
             {
                 public StatsException(String message)
@@ -8019,7 +8272,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 {
                 }
             }
-            
+
             public PlayerStats getPlayerStats(String player, ServerType st)
             {
                 try
@@ -8035,14 +8288,14 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     {
                         fetchWebPage(ref result, "http://battlelog.battlefield.com/bf4/user/" + player);
                     }
-                    
+
 
                     /* Extract the persona id */
                     MatchCollection pid = Regex.Matches(result, @"/soldier/" + player + @"/stats/(\d+)(/\w*)?/", RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
                     String personaId = "";
 
-                    foreach(Match m in pid)
+                    foreach (Match m in pid)
                     {
                         if (m.Success && m.Groups[2].Value.Trim() != "/ps3" && m.Groups[2].Value.Trim() != "/xbox" && m.Groups[2].Value.Trim() != "/xbox360" && m.Groups[2].Value.Trim() != "/xboxone" && m.Groups[2].Value.Trim() != "/ps4")
                         {
@@ -8053,7 +8306,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     if (personaId == "")
                         throw new Exception("could not find persona-id for ^b" + player);
 
-                    PlayerStats ps = new PlayerStats();                 
+                    PlayerStats ps = new PlayerStats();
                     ps.tag = extractClanTag(result, player);
                     if (st == ServerType.BF3)
                     {
@@ -8065,7 +8318,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     }
 
                     Hashtable json = (Hashtable)JSON.JsonDecode(result);
-                    
+
                     // check we got a valid response
                     if (!(json.ContainsKey("type") && json.ContainsKey("message")))
                         throw new Exception("JSON response does not contain \"type\" or \"message\" fields");
@@ -8082,12 +8335,12 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     Hashtable data = null;
                     if (!json.ContainsKey("data") || (data = (Hashtable)json["data"]) == null)
                         throw new Exception("JSON response was does not contain a data field");
-                    
+
                     Hashtable stats = null;
                     if (!data.ContainsKey("overviewStats") || (stats = (Hashtable)data["overviewStats"]) == null)
                         throw new StatsException("^1^bERROR^0^n: JSON response ^bdata^n does not contain ^boverviewStats^n");
-                    
-                    
+
+
                     // get the data fields
 
                     if (st == ServerType.BF3)
@@ -8193,7 +8446,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 {
                     this.plugin.DebugInfoSkill("^8 Exception (^b" + player + "^n): " + e.Message);
                 }
-                
+
 
                 return new PlayerStats();
             }
@@ -8228,258 +8481,272 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 spmcombat = 0;
                 kdr = 0;
                 tag = String.Empty;
-                
+
             }
 
         }
-        
-        
+
+
         #endregion
-    
+
     }
-    
-    
+
+
     #region Classes
 
-    
-    
-        class CPlayerJoinInf
+
+
+    class CPlayerJoinInf
+    {
+        private int _teamID = 0;
+        private int _playerWL = 0;
+        private int _playerSquad = 0;
+        private DateTime _Playerjoined;
+        private int _score = 0;
+        private bool _tobebalanced = false;
+        private double _rank = 0;
+        private double _skill = 0;
+        private double _spm = 0;
+        private double _spmcombat = 0;
+        private double _kdr = 0;
+        private double _TBvalue = 0;
+        private double _playerValue = 0;
+        private string _tag = "";
+
+        public bool statsFetched = false;
+
+        private bool _IsCommander = false;
+        private bool _IsSpectator = false;
+
+        public int teamID
         {
-            private int _teamID = 0;
-            private int _playerWL = 0;
-            private int _playerSquad = 0;
-            private DateTime _Playerjoined;
-            private int _score = 0;
-            private bool _tobebalanced = false;
-            private double _rank = 0;
-            private double _skill = 0;
-            private double _spm = 0;
-            private double _spmcombat = 0;
-            private double _kdr = 0;
-            private double _TBvalue = 0;
-            private double _playerValue = 0;
-            private string _tag = "";
+            get { return _teamID; }
+            set { _teamID = value; }
+        }
 
-            public bool statsFetched = false;
+        public int playerWL
+        {
+            get { return _playerWL; }
+            set { _playerWL = value; }
+        }
 
-            private bool _IsCommander = false;
-            private bool _IsSpectator = false;
-            
-            public int teamID {
-                get { return _teamID; }
-                set { _teamID = value; }
-            }
+        public int playerSquad
+        {
+            get { return _playerSquad; }
+            set { _playerSquad = value; }
+        }
 
-            public int playerWL
-            {
-                get { return _playerWL; }
-                set { _playerWL = value; }
-            }
-            
-            public int playerSquad
-            {
-                get { return _playerSquad; }
-                set { _playerSquad = value; }
-            }
-            
-            public DateTime Playerjoined {
+        public DateTime Playerjoined
+        {
             get { return _Playerjoined; }
             set { _Playerjoined = value; }
-            }
-            
-            public int score {
+        }
+
+        public int score
+        {
             get { return _score; }
             set { _score = value; }
-            }
-            
-            public bool tobebalanced {
+        }
+
+        public bool tobebalanced
+        {
             get { return _tobebalanced; }
             set { _tobebalanced = value; }
-            }
-            
-            public double rank {
-                get { return _rank; }
-                set { _rank = value; }
-            }
-
-            public double TBvalue
-            {
-                get { return _TBvalue; }
-                set { _TBvalue = value; }
-            }
-            
-            public double skill {
-                get { return _skill; }
-                set { _skill= value; }
-            }
-            
-            public double spm {
-                get { return _spm; }
-                set { _spm = value; }
-            }
-            
-            public double spmcombat {
-                get { return _spmcombat; }
-                set { _spmcombat = value; }
-            }
-            
-            public double kdr {
-                get { return _kdr; }
-                set { _kdr = value; }
-            }
-            
-            public double playerValue {
-                get { return _playerValue; }
-                set { _playerValue = value; }
-            }
-            
-            public string tag {
-                get { return _tag; }
-                set { _tag = value; }
-            }
-
-            public bool IsCommander
-            {
-                get { return _IsCommander; }
-                set { _IsCommander = value; }
-            }
-
-            public bool IsSpectator
-            {
-                get { return _IsSpectator; }
-                set { _IsSpectator = value; }
-            }
-
-            public CPlayerJoinInf(int teamID, int playerWL, int playerSquad, DateTime Playerjoined, int score, double rank, double skill, double spm, double spmcombat, double kdr, double TBvalue, double playerValue, string tag, bool tobebalanced, bool commander, bool spectator)
-            {
-                _TBvalue = TBvalue;
-                _teamID = teamID;
-                _playerWL = playerWL;
-                _playerSquad = playerSquad;
-                _Playerjoined = Playerjoined;
-                _score = score;
-                _rank = rank;
-                _skill = skill;
-                _spm = spm;
-                _spmcombat = spmcombat;
-                _kdr = kdr;
-                _tag = tag;
-                _tobebalanced = tobebalanced;
-                _playerValue = playerValue;
-                _IsCommander = commander;
-                _IsSpectator = spectator;
-            }
         }
 
-        class CPlayerScoreInf
+        public double rank
         {
-            private string _playerName = "";
-            private int _teamID = 0;
-            private int _playerSquad = 0;
-            private double _playerValue = 0;
-            private bool _balanced = false;
-            private bool _scrambled = false;
-            private string _tag = String.Empty;
+            get { return _rank; }
+            set { _rank = value; }
+        }
 
-            public string tag
-            {
-                get { return _tag; }
-                set { _tag = value; }
-            }
+        public double TBvalue
+        {
+            get { return _TBvalue; }
+            set { _TBvalue = value; }
+        }
 
-            public int teamID {
+        public double skill
+        {
+            get { return _skill; }
+            set { _skill = value; }
+        }
+
+        public double spm
+        {
+            get { return _spm; }
+            set { _spm = value; }
+        }
+
+        public double spmcombat
+        {
+            get { return _spmcombat; }
+            set { _spmcombat = value; }
+        }
+
+        public double kdr
+        {
+            get { return _kdr; }
+            set { _kdr = value; }
+        }
+
+        public double playerValue
+        {
+            get { return _playerValue; }
+            set { _playerValue = value; }
+        }
+
+        public string tag
+        {
+            get { return _tag; }
+            set { _tag = value; }
+        }
+
+        public bool IsCommander
+        {
+            get { return _IsCommander; }
+            set { _IsCommander = value; }
+        }
+
+        public bool IsSpectator
+        {
+            get { return _IsSpectator; }
+            set { _IsSpectator = value; }
+        }
+
+        public CPlayerJoinInf(int teamID, int playerWL, int playerSquad, DateTime Playerjoined, int score, double rank, double skill, double spm, double spmcombat, double kdr, double TBvalue, double playerValue, string tag, bool tobebalanced, bool commander, bool spectator)
+        {
+            _TBvalue = TBvalue;
+            _teamID = teamID;
+            _playerWL = playerWL;
+            _playerSquad = playerSquad;
+            _Playerjoined = Playerjoined;
+            _score = score;
+            _rank = rank;
+            _skill = skill;
+            _spm = spm;
+            _spmcombat = spmcombat;
+            _kdr = kdr;
+            _tag = tag;
+            _tobebalanced = tobebalanced;
+            _playerValue = playerValue;
+            _IsCommander = commander;
+            _IsSpectator = spectator;
+        }
+    }
+
+    class CPlayerScoreInf
+    {
+        private string _playerName = "";
+        private int _teamID = 0;
+        private int _playerSquad = 0;
+        private double _playerValue = 0;
+        private bool _balanced = false;
+        private bool _scrambled = false;
+        private string _tag = String.Empty;
+
+        public string tag
+        {
+            get { return _tag; }
+            set { _tag = value; }
+        }
+
+        public int teamID
+        {
             get { return _teamID; }
             set { _teamID = value; }
-            }
-            
-            public int playerSquad
-            {
-                get { return _playerSquad; }
-                set { _playerSquad = value; }
-            }
-            
-            public double playerValue
-            {
-                get { return _playerValue; }
-                set { _playerValue= value; }
-            }
-            public string playerName
-            {
-                get { return _playerName; }
-                set { _playerName = value; }
-            }
-            
-            public bool balanced
-            {
-                get { return _balanced; }
-                set { _balanced = value; }
-            }
-            public bool scrambled
-            {
-                get { return _scrambled; }
-                set { _scrambled = value; }
-            }
-            
-            public CPlayerScoreInf(string playerName, int teamID, int playerSquad, double playerValue, bool balanced, bool scrambled, string tag)
-            {
-                _tag = tag;
-                _playerName = playerName;
-                _teamID = teamID;
-                _playerSquad = playerSquad;
-                _playerValue = playerValue;
-                _balanced = balanced;
-                _scrambled = scrambled;
+        }
 
-            }
-        }       
-        
-        class CSquadScoreInf
+        public int playerSquad
         {
-            private int _teamID = 0;
-            private int _squadID = 0;
-            private double _squadScore = 0;
-            private int _squadsize = 0;
-            private bool _assigned = false;
+            get { return _playerSquad; }
+            set { _playerSquad = value; }
+        }
 
-            public bool assigned {
+        public double playerValue
+        {
+            get { return _playerValue; }
+            set { _playerValue = value; }
+        }
+        public string playerName
+        {
+            get { return _playerName; }
+            set { _playerName = value; }
+        }
+
+        public bool balanced
+        {
+            get { return _balanced; }
+            set { _balanced = value; }
+        }
+        public bool scrambled
+        {
+            get { return _scrambled; }
+            set { _scrambled = value; }
+        }
+
+        public CPlayerScoreInf(string playerName, int teamID, int playerSquad, double playerValue, bool balanced, bool scrambled, string tag)
+        {
+            _tag = tag;
+            _playerName = playerName;
+            _teamID = teamID;
+            _playerSquad = playerSquad;
+            _playerValue = playerValue;
+            _balanced = balanced;
+            _scrambled = scrambled;
+
+        }
+    }
+
+    class CSquadScoreInf
+    {
+        private int _teamID = 0;
+        private int _squadID = 0;
+        private double _squadScore = 0;
+        private int _squadsize = 0;
+        private bool _assigned = false;
+
+        public bool assigned
+        {
             get { return _assigned; }
             set { _assigned = value; }
-            }
+        }
 
-            public int teamID {
+        public int teamID
+        {
             get { return _teamID; }
             set { _teamID = value; }
-            }
-
-            public int squadsize
-            {
-                get { return _squadsize; }
-                set { _squadsize = value; }
-            }
-
-            public int squadID
-            {
-                get { return _squadID; }
-                set { _squadID = value; }
-            }
-            
-            public double squadScore
-            {
-                get { return _squadScore; }
-                set { _squadScore = value; }
-            }
-
-            public CSquadScoreInf(int teamID, int squadID, int squadsize, double squadScore, bool assigned)
-            {
-                _assigned = assigned;
-                _teamID = teamID;
-                _squadID = squadID;
-                _squadScore = squadScore;
-                _squadsize = squadsize;
-                
-            }
         }
-    
+
+        public int squadsize
+        {
+            get { return _squadsize; }
+            set { _squadsize = value; }
+        }
+
+        public int squadID
+        {
+            get { return _squadID; }
+            set { _squadID = value; }
+        }
+
+        public double squadScore
+        {
+            get { return _squadScore; }
+            set { _squadScore = value; }
+        }
+
+        public CSquadScoreInf(int teamID, int squadID, int squadsize, double squadScore, bool assigned)
+        {
+            _assigned = assigned;
+            _teamID = teamID;
+            _squadID = squadID;
+            _squadScore = squadScore;
+            _squadsize = squadsize;
+
+        }
+    }
+
     #endregion
 
 }
