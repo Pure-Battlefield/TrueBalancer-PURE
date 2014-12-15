@@ -5983,6 +5983,13 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
         this.DebugInfo("startBalancing end");
         this.boolwaitdead = false;
         }
+
+        //Pure
+        private void PostBalanceValue(double team1, double team2)
+        {
+            this.ExecuteCommand("procon.protected.send", "admin.say", "Balance Values: " + team1.ToString() + ":" + team2.ToString(), "all");
+        }
+
         #endregion
     
         #region SkillScrambler
@@ -6066,7 +6073,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
         }
         
         public void ScrambleNow() {
-            
+            PostBalanceValue(this.TBvalueA, this.TBvalueB);
             this.boolscrambleNow = true;
             this.intScrambleCount ++;
             bool boolScrambledall = true;           
@@ -6280,6 +6287,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     }
                 }
             }
+            PostBalanceValue(this.TBvalueA, this.TBvalueB);
         }
         
         public void OnCommandScrambleNow(string strSpeaker, string strText, MatchCommand mtcCommand, CapturedCommand capCommand, CPlayerSubset subMatchedScope){
