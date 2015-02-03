@@ -5985,9 +5985,9 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
         }
 
         //Pure
-        private void PostBalanceValue(double team1, double team2)
+        private void PostBalanceValue(string message)
         {
-            this.ExecuteCommand("procon.protected.send", "admin.say", "Balance Values: " + team1.ToString() + ":" + team2.ToString(), "all");
+            this.ExecuteCommand("procon.protected.send", "admin.say", message, "all");
         }
 
         #endregion
@@ -6073,7 +6073,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
         }
         
         public void ScrambleNow() {
-            PostBalanceValue(this.TBvalueA, this.TBvalueB);
+            //PostBalanceValue(this.TBvalueA, this.TBvalueB);
             this.boolscrambleNow = true;
             this.intScrambleCount ++;
             bool boolScrambledall = true;           
@@ -6287,7 +6287,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     }
                 }
             }
-            PostBalanceValue(this.TBvalueA, this.TBvalueB);
+            //PostBalanceValue(this.TBvalueA, this.TBvalueB);
         }
         
         public void OnCommandScrambleNow(string strSpeaker, string strText, MatchCommand mtcCommand, CapturedCommand capCommand, CPlayerSubset subMatchedScope){
@@ -6635,6 +6635,10 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             double AverageTeamB = TeamValueB / TeamSizeB;
             double AverageDiff = AverageTeamA - AverageTeamB;
 
+            PostBalanceValue("SortValue Before KeepAllSquads Sort");
+            PostBalanceValue("Team1: "+TeamSizeA+" - "+AverageTeamA+"   Team2: "+TeamSizeB+" - "+AverageTeamB);
+            PostBalanceValue("Average Difference Before Adjustment: " + AverageDiff);
+
             this.DebugInfoSkill("SortValue before adjustment: ^bTeam 1: ^7" + TeamSizeA + "^9*^2" + AverageTeamA +
                 "^9^n --- ^bTeam 2: ^7" + TeamSizeB + "^9*^2" + AverageTeamB);
             this.DebugInfoSkill("Average Difference before adjustment: ^b^2" + AverageDiff);
@@ -6721,6 +6725,10 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
             } while (!adjusted);
 
+
+            PostBalanceValue("SortValue After KeepAllSquads Sort");
+            PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
+            PostBalanceValue("Average Difference After Adjustment: " + AverageDiff);
 
             this.DebugInfoSkill("SortValue ^bafter^n adjustment: ^bTeam 1: ^7" + TeamSizeA + "^9*^2" + AverageTeamA +
                 "^9^n --- ^bTeam 2: ^7" + TeamSizeB + "^9*^2" + AverageTeamB);
@@ -7095,6 +7103,10 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             double AverageTeamB = TeamValueB / TeamSizeB;
             double AverageDiff = AverageTeamA - AverageTeamB;
 
+            PostBalanceValue("SortValue Before KeepClanMates Sort");
+            PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
+            PostBalanceValue("Average Difference Before Adjustment: " + AverageDiff);
+
             this.DebugInfoSkill("SortValue before adjustment: ^bTeam 1: ^7" + TeamSizeA + "^9*^2" + AverageTeamA +
                 "^9^n --- ^bTeam 2: ^7" + TeamSizeB + "^9*^2" + AverageTeamB);
             this.DebugInfoSkill("Average Difference before adjustment: ^b^2" + AverageDiff);
@@ -7176,6 +7188,10 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
             } while (!adjusted);
 
+
+            PostBalanceValue("SortValue After KeepClanMates Sort");
+            PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
+            PostBalanceValue("Average Difference After Adjustment: " + AverageDiff);
 
             this.DebugInfoSkill("SortValue ^bafter^n PLAYER adjustment: ^bTeam 1: ^7" + TeamSizeA + "^9*^2" + AverageTeamA +
                 "^9^n --- ^bTeam 2: ^7" + TeamSizeB + "^9*^2" + AverageTeamB);
@@ -7363,6 +7379,11 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
             if (squadadjust)
             {
+
+                PostBalanceValue("SortValue After SquadAdjustment Sort");
+                PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
+                PostBalanceValue("Average Difference After Adjustment: " + AverageDiff);
+
                 this.DebugInfoSkill("SortValue ^bafter^n SQUAD adjustment: ^bTeam 1: ^7" + TeamSizeA + "^9*^2" + AverageTeamA +
                     "^9^n --- ^bTeam 2: ^7" + TeamSizeB + "^9*^2" + AverageTeamB);
                 this.DebugInfoSkill("Average Difference ^bafter ^nSQUAD adjustment: ^b^2" + AverageDiff);
@@ -7560,6 +7581,10 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             double AverageTeamB = TeamValueB / TeamSizeB;
             double AverageDiff = AverageTeamA - AverageTeamB;
 
+            PostBalanceValue("SortValue Before KeepNoSquads Sort");
+            PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
+            PostBalanceValue("Average Difference Before Adjustment: " + AverageDiff);
+
             this.DebugInfoSkill("SortValue before adjustment: ^bTeam 1: ^7" + TeamSizeA + "^9*^2" + AverageTeamA +
                 "^9^n --- ^bTeam 2: ^7" + TeamSizeB + "^9*^2" + AverageTeamB);
             this.DebugInfoSkill("Average Difference before adjustment: ^b^2" + AverageDiff);
@@ -7641,6 +7666,9 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
             } while (!adjusted);
 
+            PostBalanceValue("SortValue After KeepNoSquads Sort");
+            PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
+            PostBalanceValue("Average Difference After Adjustment: " + AverageDiff);
 
             this.DebugInfoSkill("SortValue ^bafter^n adjustment: ^bTeam 1: ^7" + TeamSizeA + "^9*^2" + AverageTeamA +
                 "^9^n --- ^bTeam 2: ^7" + TeamSizeB + "^9*^2" + AverageTeamB);
