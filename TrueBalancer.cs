@@ -309,7 +309,8 @@ namespace PRoConEvents {
         private enumBoolYesNo Check4Update;
 
         //PURE
-        private int intPopMaintainSquads; 
+        private int intPopMaintainSquads;
+        private enumBoolYesNo ynEnableTBValueToChat;
         
         public TrueBalancer() {
 
@@ -558,6 +559,7 @@ namespace PRoConEvents {
 
             //PURE
             this.intPopMaintainSquads = 0;
+            this.ynEnableTBValueToChat = enumBoolYesNo.Yes;
         }
 
         #endregion
@@ -1169,7 +1171,8 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
             lstReturn.Add(new CPluginVariable("7. Testing settings|Enable Virtual Mode?", this.ynbVirtualMode.GetType(), this.ynbVirtualMode));
             //PURE
-            lstReturn.Add(new CPluginVariable("8. PURE Custom Balance Settings|Minimum population to start maintaining squads", this.intPopMaintainSquads.GetType(), this.intPopMaintainSquads)); 
+            lstReturn.Add(new CPluginVariable("8. PURE Custom Balance Settings|Minimum population to start maintaining squads", this.intPopMaintainSquads.GetType(), this.intPopMaintainSquads));
+            lstReturn.Add(new CPluginVariable("8. PURE Custom Balance Settings|Enable TB score chat output when scrambling", this.ynEnableTBValueToChat.GetType(), this.ynEnableTBValueToChat));
             return lstReturn;
         }
 
@@ -1324,8 +1327,9 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             lstReturn.Add(new CPluginVariable("Check for Update?", this.Check4Update.GetType(), this.Check4Update));
 
             lstReturn.Add(new CPluginVariable("Enable Virtual Mode?", this.ynbVirtualMode.GetType(), this.ynbVirtualMode));
-
+            //PURE
             lstReturn.Add(new CPluginVariable("Minimum population to start maintaining squads", this.intPopMaintainSquads.GetType(), this.intPopMaintainSquads));
+            lstReturn.Add(new CPluginVariable("Enable TB score chat output when scrambling", this.ynEnableTBValueToChat.GetType(), this.ynEnableTBValueToChat));
 
             return lstReturn;
         }
@@ -2040,6 +2044,10 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 {
                     this.intPopMaintainSquads = 1;
                 }
+            }
+            else if (strVariable.CompareTo("Enable TB score chat output when scrambling") == 0 && Enum.IsDefined(typeof(enumBoolYesNo), strValue) == true)
+            {
+                this.ynEnableTBValueToChat = (enumBoolYesNo)Enum.Parse(typeof(enumBoolYesNo), strValue);
             }
 
             if (strVariable == "Enable Virtual Mode?" && Enum.IsDefined(typeof(enumBoolYesNo), strValue) == true)
@@ -5987,7 +5995,7 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
         //Pure
         private void PostBalanceValue(string message)
         {
-            this.ExecuteCommand("procon.protected.send", "admin.say", message, "all");
+                this.ExecuteCommand("procon.protected.send", "admin.say", message, "all");
         }
 
         #endregion
@@ -6073,7 +6081,6 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
         }
         
         public void ScrambleNow() {
-            //PostBalanceValue(this.TBvalueA, this.TBvalueB);
             this.boolscrambleNow = true;
             this.intScrambleCount ++;
             bool boolScrambledall = true;           
@@ -6287,7 +6294,6 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                     }
                 }
             }
-            //PostBalanceValue(this.TBvalueA, this.TBvalueB);
         }
         
         public void OnCommandScrambleNow(string strSpeaker, string strText, MatchCommand mtcCommand, CapturedCommand capCommand, CPlayerSubset subMatchedScope){
@@ -6634,10 +6640,14 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             double AverageTeamA = TeamValueA / TeamSizeA;
             double AverageTeamB = TeamValueB / TeamSizeB;
             double AverageDiff = AverageTeamA - AverageTeamB;
+            //PURE
+            if (ynEnableTBValueToChat == enumBoolYesNo.Yes)
+            {
+                PostBalanceValue("SortValue Before KeepAllSquads Sort");
+                PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
+                PostBalanceValue("Average Difference Before Adjustment: " + AverageDiff);
+            }
 
-            PostBalanceValue("SortValue Before KeepAllSquads Sort");
-            PostBalanceValue("Team1: "+TeamSizeA+" - "+AverageTeamA+"   Team2: "+TeamSizeB+" - "+AverageTeamB);
-            PostBalanceValue("Average Difference Before Adjustment: " + AverageDiff);
 
             this.DebugInfoSkill("SortValue before adjustment: ^bTeam 1: ^7" + TeamSizeA + "^9*^2" + AverageTeamA +
                 "^9^n --- ^bTeam 2: ^7" + TeamSizeB + "^9*^2" + AverageTeamB);
@@ -6725,10 +6735,14 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
             } while (!adjusted);
 
+            //PURE
+            if (ynEnableTBValueToChat == enumBoolYesNo.Yes)
+            {
+                PostBalanceValue("SortValue After KeepAllSquads Sort");
+                PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
+                PostBalanceValue("Average Difference After Adjustment: " + AverageDiff);
+            }
 
-            PostBalanceValue("SortValue After KeepAllSquads Sort");
-            PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
-            PostBalanceValue("Average Difference After Adjustment: " + AverageDiff);
 
             this.DebugInfoSkill("SortValue ^bafter^n adjustment: ^bTeam 1: ^7" + TeamSizeA + "^9*^2" + AverageTeamA +
                 "^9^n --- ^bTeam 2: ^7" + TeamSizeB + "^9*^2" + AverageTeamB);
@@ -7103,9 +7117,14 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             double AverageTeamB = TeamValueB / TeamSizeB;
             double AverageDiff = AverageTeamA - AverageTeamB;
 
-            PostBalanceValue("SortValue Before KeepClanMates Sort");
-            PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
-            PostBalanceValue("Average Difference Before Adjustment: " + AverageDiff);
+            //PURE
+            if (ynEnableTBValueToChat == enumBoolYesNo.Yes)
+            {
+                PostBalanceValue("SortValue Before KeepClanMates Sort");
+                PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
+                PostBalanceValue("Average Difference Before Adjustment: " + AverageDiff);
+            }
+
 
             this.DebugInfoSkill("SortValue before adjustment: ^bTeam 1: ^7" + TeamSizeA + "^9*^2" + AverageTeamA +
                 "^9^n --- ^bTeam 2: ^7" + TeamSizeB + "^9*^2" + AverageTeamB);
@@ -7187,11 +7206,13 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 }
 
             } while (!adjusted);
-
-
-            PostBalanceValue("SortValue After KeepClanMates Sort");
-            PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
-            PostBalanceValue("Average Difference After Adjustment: " + AverageDiff);
+            //PURE
+            if (ynEnableTBValueToChat == enumBoolYesNo.Yes)
+            {
+                PostBalanceValue("SortValue After KeepClanMates Sort");
+                PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
+                PostBalanceValue("Average Difference After Adjustment: " + AverageDiff);
+            }
 
             this.DebugInfoSkill("SortValue ^bafter^n PLAYER adjustment: ^bTeam 1: ^7" + TeamSizeA + "^9*^2" + AverageTeamA +
                 "^9^n --- ^bTeam 2: ^7" + TeamSizeB + "^9*^2" + AverageTeamB);
@@ -7379,10 +7400,13 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
 
             if (squadadjust)
             {
-
-                PostBalanceValue("SortValue After SquadAdjustment Sort");
-                PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
-                PostBalanceValue("Average Difference After Adjustment: " + AverageDiff);
+                //PURE
+                if (ynEnableTBValueToChat == enumBoolYesNo.Yes)
+                {
+                    PostBalanceValue("SortValue After SquadAdjustment Sort");
+                    PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
+                    PostBalanceValue("Average Difference After Adjustment: " + AverageDiff);
+                }
 
                 this.DebugInfoSkill("SortValue ^bafter^n SQUAD adjustment: ^bTeam 1: ^7" + TeamSizeA + "^9*^2" + AverageTeamA +
                     "^9^n --- ^bTeam 2: ^7" + TeamSizeB + "^9*^2" + AverageTeamB);
@@ -7581,9 +7605,14 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
             double AverageTeamB = TeamValueB / TeamSizeB;
             double AverageDiff = AverageTeamA - AverageTeamB;
 
-            PostBalanceValue("SortValue Before KeepNoSquads Sort");
-            PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
-            PostBalanceValue("Average Difference Before Adjustment: " + AverageDiff);
+            //PURE
+            if (ynEnableTBValueToChat == enumBoolYesNo.Yes)
+            {
+                PostBalanceValue("SortValue Before KeepNoSquads Sort");
+                PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
+                PostBalanceValue("Average Difference Before Adjustment: " + AverageDiff);
+            }
+
 
             this.DebugInfoSkill("SortValue before adjustment: ^bTeam 1: ^7" + TeamSizeA + "^9*^2" + AverageTeamA +
                 "^9^n --- ^bTeam 2: ^7" + TeamSizeB + "^9*^2" + AverageTeamB);
@@ -7665,10 +7694,14 @@ If you have any Idears for the autobalancer contact me on the Procon - Forums. I
                 }
 
             } while (!adjusted);
+            //PURE
+            if (ynEnableTBValueToChat == enumBoolYesNo.Yes)
+            {
+                PostBalanceValue("SortValue After KeepNoSquads Sort");
+                PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
+                PostBalanceValue("Average Difference After Adjustment: " + AverageDiff);
+            }
 
-            PostBalanceValue("SortValue After KeepNoSquads Sort");
-            PostBalanceValue("Team1: " + TeamSizeA + " - " + AverageTeamA + "   Team2: " + TeamSizeB + " - " + AverageTeamB);
-            PostBalanceValue("Average Difference After Adjustment: " + AverageDiff);
 
             this.DebugInfoSkill("SortValue ^bafter^n adjustment: ^bTeam 1: ^7" + TeamSizeA + "^9*^2" + AverageTeamA +
                 "^9^n --- ^bTeam 2: ^7" + TeamSizeB + "^9*^2" + AverageTeamB);
